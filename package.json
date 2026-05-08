@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && npx prisma migrate deploy && next build",
+    "build": "npx prisma generate && npx prisma db push && next build",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "npx prisma generate",
@@ -14,7 +14,6 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@base-ui/react": "^1.4.1",
     "@prisma/client": "^5.22.0",
     "@stripe/stripe-js": "^9.4.0",
     "class-variance-authority": "^0.7.1",
@@ -22,6 +21,7 @@
     "dotenv": "^17.4.2",
     "lucide-react": "^1.14.0",
     "next": "16.2.6",
+    "prisma": "^5.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "stripe": "^22.1.1",
@@ -35,7 +35,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "prisma": "^5.22.0",
     "shadcn": "^4.7.0",
     "tailwindcss": "^4",
     "tsx": "^4.19.0",
