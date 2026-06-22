@@ -3,12 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { createHmac, randomBytes } from "crypto";
 import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/password";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
-
-const SECRET = process.env.AUTH_SECRET || "agatelier-auth-secret-change-me";
+import { getRequiredSecret } from "@/lib/env";
 
 function createToken(userId: string): string {
   const payload = `${userId}:${Date.now()}:${randomBytes(8).toString("hex")}`;
-  const signature = createHmac("sha256", SECRET).update(payload).digest("hex");
+  const signature = createHmac("sha256", getRequiredSecret("AUTH_SECRET")).update(payload).digest("hex");
   return `${payload}:${signature}`;
 }
 
@@ -36,7 +35,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
-    if (!verifyPassword(password, user.password, { legacySecret: SECRET })) {
+    if (!verifyPassword(password, user.password, { legacySecret: getRequiredSecret("AUTH_SECRET") })) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 

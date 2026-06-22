@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
+import { getSiteUrl } from "@/lib/env";
 
 function getFirstImage(images: string): string | undefined {
   try {
@@ -25,6 +26,7 @@ export async function GET() {
 
     const product = products[0];
     const productImage = getFirstImage(product.images);
+    const siteUrl = getSiteUrl();
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -42,8 +44,8 @@ export async function GET() {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_URL}/checkout/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}/cart`,
+      success_url: `${siteUrl}/checkout/success`,
+      cancel_url: `${siteUrl}/cart`,
       metadata: {
         productId: product.id,
       },

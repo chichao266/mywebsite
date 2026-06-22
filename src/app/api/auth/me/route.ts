@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createHmac } from "crypto";
-
-const SECRET = process.env.AUTH_SECRET || "agatelier-auth-secret-change-me";
+import { getOptionalSecret } from "@/lib/env";
 
 function verifyToken(token: string): string | null {
   try {
+    const secret = getOptionalSecret("AUTH_SECRET");
+    if (!secret) return null;
+
     const parts = token.split(":");
     if (parts.length < 3) return null;
     const userId = parts[0];
     const signature = parts[parts.length - 1];
     const payload = parts.slice(0, -1).join(":");
-    const expected = createHmac("sha256", SECRET).update(payload).digest("hex");
+    const expected = createHmac("sha256", secret).update(payload).digest("hex");
 
     if (signature.length !== expected.length) return null;
     let ok = 0;
