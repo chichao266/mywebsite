@@ -3,12 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { createHmac, randomBytes } from "crypto";
 import { hashPassword } from "@/lib/password";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
-
-const SECRET = process.env.AUTH_SECRET || "agatelier-auth-secret-change-me";
+import { getRequiredSecret } from "@/lib/env";
 
 function createToken(userId: string): string {
   const payload = `${userId}:${Date.now()}:${randomBytes(8).toString("hex")}`;
-  const signature = createHmac("sha256", SECRET).update(payload).digest("hex");
+  const signature = createHmac("sha256", getRequiredSecret("AUTH_SECRET")).update(payload).digest("hex");
   return `${payload}:${signature}`;
 }
 

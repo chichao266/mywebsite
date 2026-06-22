@@ -5,12 +5,22 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartProvider } from "@/lib/cart-context";
 import { HeaderStyles } from "@/components/header-styles";
+import { getSiteUrl } from "@/lib/env";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"] });
 
+function getMetadataBase(): URL | undefined {
+  try {
+    return new URL(getSiteUrl());
+  } catch {
+    return undefined;
+  }
+}
+
 export const metadata: Metadata = {
+  metadataBase: getMetadataBase(),
   title: { default: "Agatelier — Handcrafted Agate Jewelry", template: "%s | Agatelier" },
   description: "Discover handcrafted agate jewelry.",
   keywords: ["agate jewelry", "natural stone jewelry"],

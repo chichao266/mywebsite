@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/password";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
-
-const SECRET = process.env.ADMIN_SECRET || "agatelier-admin-secret-change-me";
+import { getOptionalSecret, getRequiredSecret } from "@/lib/env";
 
 async function createToken(payload: string): Promise<string> {
+  const secret = getRequiredSecret("ADMIN_SECRET");
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey(
     "raw",
-    encoder.encode(SECRET),
+    encoder.encode(secret),
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"]
@@ -22,6 +22,12 @@ async function createToken(payload: string): Promise<string> {
 }
 
 export async function POST(request: NextRequest) {
+  const adminSecret = getOptionalSecret("ADMIN_SECRET");
+  const authSecret = getOptionalSecret("AUTH_SECRET");
+  if (!adminSecret || !authSecret) {
+    return NextResponse.json({ error: "Server authentication is not configured" }, { status: 500 });
+  }
+
   const limit = rateLimit(`admin-login:${getClientIp(request)}`, {
     limit: 10,
     windowMs: 15 * 60 * 1000,
@@ -39,7 +45,7 @@ export async function POST(request: NextRequest) {
   if (
     !user ||
     !verifyPassword(password, user.password, {
-      legacySecret: process.env.AUTH_SECRET || "agatelier-auth-secret-change-me",
+      legacySecret: authSecret,
       allowPlainTextLegacy: true,
     }) ||
     user.role !== "admin"

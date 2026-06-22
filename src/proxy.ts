@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
-const SECRET = process.env.ADMIN_SECRET || "agatelier-admin-secret-change-me";
+import { getOptionalSecret } from "@/lib/env";
 
 function hexToBytes(hex: string): Uint8Array {
   const bytes = new Uint8Array(hex.length / 2);
@@ -13,6 +12,9 @@ function hexToBytes(hex: string): Uint8Array {
 
 async function verifyToken(token: string): Promise<boolean> {
   try {
+    const secret = getOptionalSecret("ADMIN_SECRET");
+    if (!secret) return false;
+
     const lastColon = token.lastIndexOf(":");
     if (lastColon === -1) return false;
     const payload = token.substring(0, lastColon);
@@ -22,7 +24,7 @@ async function verifyToken(token: string): Promise<boolean> {
     const encoder = new TextEncoder();
     const key = await crypto.subtle.importKey(
       "raw",
-      encoder.encode(SECRET),
+      encoder.encode(secret),
       { name: "HMAC", hash: "SHA-256" },
       false,
       ["verify"]
