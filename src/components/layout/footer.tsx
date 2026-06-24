@@ -9,7 +9,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2.5 font-serif text-xl font-bold text-foreground">
               <Logo size={22} />
-              Lumea
+              Avoryne
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-6 text-muted-foreground">
               Modern lab-grown diamond and colored gemstone jewelry for everyday brilliance.
@@ -45,7 +45,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} Lumea. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Avoryne. All rights reserved.</p>
           <p className="max-w-xl text-xs">
             Lab-grown gemstones are disclosed clearly on each product page. Product photography may vary by screen.
           </p>

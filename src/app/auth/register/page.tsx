@@ -51,7 +51,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-serif font-bold">Create account</h1>
-          <p className="text-muted-foreground text-sm mt-2">Join Lumea and start collecting</p>
+          <p className="text-muted-foreground text-sm mt-2">Join Avoryne and start collecting</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

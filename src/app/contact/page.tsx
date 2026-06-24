@@ -6,7 +6,7 @@ export default function ContactPage() {
   const methods = [
     {
       title: "Email",
-      detail: "hello@lumeajewelry.com",
+      detail: "hello@avoryne.com",
       desc: "For product questions, order support, and wholesale inquiries.",
     },
     {

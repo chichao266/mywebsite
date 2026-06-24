@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "后台管理 - Lumea",
+  title: "后台管理 - Avoryne",
 };
 
 export default function AdminLayout({
@@ -16,7 +16,7 @@ export default function AdminLayout({
         <aside className="w-56 min-h-screen bg-white border-r border-stone-200 p-4 flex flex-col">
           <div className="mb-8">
             <Link href="/" className="text-lg font-bold text-stone-800">
-              Lumea
+              Avoryne
             </Link>
             <p className="text-xs text-stone-400 mt-0.5">后台管理</p>
           </div>

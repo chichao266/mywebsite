@@ -61,7 +61,7 @@ export default async function HomePage() {
               Diamonds and color, made for every day.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-white/78 sm:text-lg">
-              Lumea creates modern lab-grown diamond and colored gemstone jewelry with clear origin,
+              Avoryne creates modern lab-grown diamond and colored gemstone jewelry with clear origin,
               refined settings, and an easy international sensibility.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">

@@ -21,12 +21,12 @@ function getMetadataBase(): URL | undefined {
 
 export const metadata: Metadata = {
   metadataBase: getMetadataBase(),
-  title: { default: "Lumea — Lab-Grown Diamond & Gemstone Jewelry", template: "%s | Lumea" },
+  title: { default: "Avoryne — Lab-Grown Diamond & Gemstone Jewelry", template: "%s | Avoryne" },
   description: "Modern lab-grown diamond and colored gemstone jewelry for everyday brilliance.",
   keywords: ["lab-grown diamond jewelry", "lab-grown gemstone jewelry", "colored gemstone jewelry"],
   openGraph: {
-    siteName: "Lumea",
-    title: "Lumea",
+    siteName: "Avoryne",
+    title: "Avoryne",
     description: "Modern lab-grown diamond and colored gemstone jewelry.",
     type: "website",
   },

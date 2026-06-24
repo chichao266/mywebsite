@@ -150,7 +150,7 @@ async function main() {
     await prisma.product.create({ data: product });
   }
 
-  console.log(`Seeded ${products.length} Lumea products`);
+  console.log(`Seeded ${products.length} Avoryne products`);
 }
 
 main()

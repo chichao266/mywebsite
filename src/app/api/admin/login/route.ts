@@ -4,7 +4,7 @@ import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/passwor
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { getOptionalSecret, getRequiredSecret } from "@/lib/env";
 
-const DEV_ADMIN_EMAIL = "admin@lumeajewelry.com";
+const DEV_ADMIN_EMAIL = "admin@avoryne.com";
 const DEV_ADMIN_PASSWORD = "admin123456";
 
 async function createToken(payload: string): Promise<string> {
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: "本地数据库未连接。开发预览可使用 admin@lumeajewelry.com / admin123456" },
+      { error: "本地数据库未连接。开发预览可使用 admin@avoryne.com / admin123456" },
       { status: 503 }
     );
   }

@@ -51,7 +51,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-stone-50">
       <div className="w-full max-w-sm p-8 bg-white rounded-2xl shadow-sm border border-stone-200">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-stone-800">Lumea</h1>
+          <h1 className="text-2xl font-bold text-stone-800">Avoryne</h1>
           <p className="text-sm text-stone-500 mt-1">后台管理登录</p>
         </div>
 
@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              placeholder="admin@lumeajewelry.com"
+              placeholder="admin@avoryne.com"
             />
           </div>
 

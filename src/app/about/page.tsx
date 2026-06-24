@@ -30,7 +30,7 @@ export default async function AboutPage() {
             Fine jewelry for a more transparent generation.
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
-            Lumea is built around lab-grown diamonds and colored gemstones: brilliant materials,
+            Avoryne is built around lab-grown diamonds and colored gemstones: brilliant materials,
             modern proportions, and clear language from first glance to checkout.
           </p>
         </div>

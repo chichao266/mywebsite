@@ -11,7 +11,7 @@ export const demoSystemSettings = [
     id: "demo-system-site-name",
     key: "system_site_name",
     title: "站点名称",
-    content: "Lumea",
+    content: "Avoryne",
   },
   {
     id: "demo-system-site-desc",
@@ -23,7 +23,7 @@ export const demoSystemSettings = [
     id: "demo-system-contact-email",
     key: "system_contact_email",
     title: "联系邮箱",
-    content: "hello@lumeajewelry.com",
+    content: "hello@avoryne.com",
   },
   {
     id: "demo-system-phone",
@@ -51,27 +51,27 @@ export const demoSiteSettings = [
     key: "brand_intro",
     title: "品牌简介",
     content:
-      "Lumea creates modern lab-grown diamond and colored gemstone jewelry for everyday polish.",
+      "Avoryne creates modern lab-grown diamond and colored gemstone jewelry for everyday polish.",
   },
   {
     id: "demo-our-story",
     key: "our_story",
     title: "品牌故事",
     content:
-      "Lumea was created for customers who want fine-jewelry polish with clearer material language. Our collection centers on lab-grown diamonds, sapphires, rubies, and emeralds.",
+      "Avoryne was created for customers who want fine-jewelry polish with clearer material language. Our collection centers on lab-grown diamonds, sapphires, rubies, and emeralds.",
   },
   {
     id: "demo-contact-us",
     key: "contact_us",
     title: "联系我们",
-    content: "Email hello@lumeajewelry.com. We typically respond within one business day.",
+    content: "Email hello@avoryne.com. We typically respond within one business day.",
   },
   {
     id: "demo-shipping",
     key: "shipping",
     title: "配送说明",
     content:
-      "Each Lumea piece is prepared with a final quality check before shipment. Standard international shipping usually takes 7-14 business days.",
+      "Each Avoryne piece is prepared with a final quality check before shipment. Standard international shipping usually takes 7-14 business days.",
   },
   {
     id: "demo-returns",
@@ -93,9 +93,9 @@ export const demoSiteSettings = [
 export const demoUsers = [
   {
     id: "demo-admin-user",
-    email: "admin@lumeajewelry.com",
+    email: "admin@avoryne.com",
     password: "",
-    name: "Lumea Admin",
+    name: "Avoryne Admin",
     role: "admin",
     createdAt: now,
     updatedAt: now,
