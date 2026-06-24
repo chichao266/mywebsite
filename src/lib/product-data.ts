@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { canUseDemoData } from "@/lib/admin-dev-fallbacks";
 import { demoProducts } from "@/lib/demo-products";
 
 function canUseDemoProducts() {
-  return process.env.NODE_ENV !== "production";
+  return canUseDemoData();
 }
 
 function fallbackProducts() {

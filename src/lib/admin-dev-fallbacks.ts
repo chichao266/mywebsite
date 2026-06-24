@@ -1,5 +1,17 @@
+export function isProductionDeployment() {
+  if (process.env.VERCEL_ENV) {
+    return process.env.VERCEL_ENV === "production";
+  }
+
+  return process.env.NODE_ENV === "production";
+}
+
+export function canUseDemoData() {
+  return !isProductionDeployment();
+}
+
 export function rethrowInProduction(error: unknown) {
-  if (process.env.NODE_ENV === "production") {
+  if (isProductionDeployment()) {
     throw error;
   }
 }

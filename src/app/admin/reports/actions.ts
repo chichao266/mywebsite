@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { isProductionDeployment } from "@/lib/admin-dev-fallbacks";
 import { demoProducts } from "@/lib/demo-products";
 
 export async function getStats() {
@@ -40,7 +41,7 @@ export async function getStats() {
       recentOrders,
     };
   } catch {
-    if (process.env.NODE_ENV === "production") throw new Error("Database is required in production.");
+    if (isProductionDeployment()) throw new Error("Database is required in production.");
 
     const categories = new Map<string, number>();
     for (const product of demoProducts) {

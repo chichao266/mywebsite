@@ -1,10 +1,11 @@
 import { prisma } from "@/lib/prisma";
+import { canUseDemoData } from "@/lib/admin-dev-fallbacks";
 import { demoProducts } from "@/lib/demo-products";
 
 export const dynamic = "force-dynamic";
 
 function canUseDemoAdmin() {
-  return process.env.NODE_ENV !== "production";
+  return canUseDemoData();
 }
 
 export default async function AdminDashboard() {

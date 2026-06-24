@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isProductionDeployment } from "@/lib/admin-dev-fallbacks";
 import { getPaymentConfig, type PaymentMethod } from "@/lib/payment-config";
 import { getProductById } from "@/lib/product-data";
 
@@ -114,7 +115,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ orderId: order.id, paymentMethod });
   } catch (error) {
-    if (process.env.NODE_ENV === "production") {
+    if (isProductionDeployment()) {
       throw error;
     }
 

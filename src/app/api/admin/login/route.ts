@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/password";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { getOptionalSecret, getRequiredSecret } from "@/lib/env";
+import { canUseDemoData } from "@/lib/admin-dev-fallbacks";
 
 const DEV_ADMIN_EMAIL = "admin@avoryne.com";
 const DEV_ADMIN_PASSWORD = "admin123456";
@@ -25,7 +26,7 @@ async function createToken(payload: string): Promise<string> {
 }
 
 function canUseDevAdmin() {
-  return process.env.NODE_ENV !== "production";
+  return canUseDemoData();
 }
 
 async function createAdminResponse(user: { id: string; email: string }) {
