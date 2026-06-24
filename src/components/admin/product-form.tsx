@@ -12,6 +12,15 @@ interface ProductFormData {
   price: string;
   images: string[];
   category: string;
+  stoneType?: string;
+  metal?: string;
+  caratWeight?: string;
+  cut?: string;
+  color?: string;
+  clarity?: string;
+  certification?: string;
+  dimensions?: string;
+  care?: string;
   stock: string;
   featured: boolean;
 }
@@ -34,7 +43,16 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
       description: "",
       price: "",
       images: [],
-      category: "Agate",
+      category: "Lab Diamonds",
+      stoneType: "Lab-grown diamond",
+      metal: "",
+      caratWeight: "",
+      cut: "",
+      color: "",
+      clarity: "",
+      certification: "",
+      dimensions: "",
+      care: "",
       stock: "1",
       featured: false,
     }
@@ -106,7 +124,11 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
     }
   };
 
-  const categories = [    { value: "Agate", label: "Agate · 玛瑙", color: "bg-amber-400/10 text-amber-600 border-amber-400/20" },
+  const categories = [
+    { value: "Lab Diamonds", label: "Lab Diamonds", color: "bg-neutral-100 text-neutral-700 border-neutral-200" },
+    { value: "Lab Sapphires", label: "Lab Sapphires", color: "bg-blue-50 text-blue-700 border-blue-200" },
+    { value: "Lab Emeralds", label: "Lab Emeralds", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+    { value: "Lab Rubies", label: "Lab Rubies", color: "bg-rose-50 text-rose-700 border-rose-200" },
   ];
 
   const maxImages = 5;
@@ -124,7 +146,7 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
       {/* Name */}
       <div>
         <label className="block text-sm font-medium mb-1.5">Product Name</label>
-        <Input name="name" value={form.name} onChange={handleChange} required placeholder="e.g. Agate Carving — Twin Hearts" />
+        <Input name="name" value={form.name} onChange={handleChange} required placeholder="e.g. Bezel Lab Diamond Pendant" />
       </div>
 
       {/* Description */}
@@ -149,6 +171,33 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
         <div>
           <label className="block text-sm font-medium mb-1.5">Stock</label>
           <Input name="stock" type="number" min="0" value={form.stock} onChange={handleChange} required placeholder="5" />
+        </div>
+      </div>
+
+      {/* Jewelry specifications */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 rounded-md border border-border/70 p-4">
+        <div className="sm:col-span-2">
+          <h2 className="text-sm font-semibold">Jewelry Specifications</h2>
+          <p className="mt-1 text-xs text-muted-foreground">These details appear on the public product page.</p>
+        </div>
+        <SpecInput label="Stone Type" name="stoneType" value={form.stoneType || ""} onChange={handleChange} placeholder="Lab-grown diamond" />
+        <SpecInput label="Metal" name="metal" value={form.metal || ""} onChange={handleChange} placeholder="14k gold vermeil" />
+        <SpecInput label="Carat Weight" name="caratWeight" value={form.caratWeight || ""} onChange={handleChange} placeholder="0.50 ct total" />
+        <SpecInput label="Cut" name="cut" value={form.cut || ""} onChange={handleChange} placeholder="Round brilliant" />
+        <SpecInput label="Color" name="color" value={form.color || ""} onChange={handleChange} placeholder="Near-colorless" />
+        <SpecInput label="Clarity" name="clarity" value={form.clarity || ""} onChange={handleChange} placeholder="VS equivalent" />
+        <SpecInput label="Certification" name="certification" value={form.certification || ""} onChange={handleChange} placeholder="Certificate available" />
+        <SpecInput label="Dimensions" name="dimensions" value={form.dimensions || ""} onChange={handleChange} placeholder="6 mm setting" />
+        <div className="sm:col-span-2">
+          <label className="block text-sm font-medium mb-1.5">Care</label>
+          <textarea
+            name="care"
+            value={form.care || ""}
+            onChange={handleChange}
+            rows={3}
+            placeholder="Clean with a soft cloth and store separately."
+            className="flex w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] md:text-sm resize-y"
+          />
         </div>
       </div>
 
@@ -211,5 +260,26 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
         <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
       </div>
     </form>
+  );
+}
+
+function SpecInput({
+  label,
+  name,
+  value,
+  onChange,
+  placeholder,
+}: {
+  label: string;
+  name: keyof ProductFormData;
+  value: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  placeholder: string;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium mb-1.5">{label}</label>
+      <Input name={name} value={value} onChange={onChange} placeholder={placeholder} />
+    </div>
   );
 }

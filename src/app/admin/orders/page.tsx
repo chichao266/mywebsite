@@ -1,10 +1,13 @@
 import { prisma } from "@/lib/prisma";
+import { rethrowInProduction } from "@/lib/admin-dev-fallbacks";
+import { getPaymentLabel } from "@/lib/payment-config";
 import { updateOrderStatus } from "./actions";
 import StatusSelect from "./status-select";
 
 export const dynamic = "force-dynamic";
 
 const STATUS_LABELS: Record<string, string> = {
+  pending_payment: "等待付款",
   pending: "待处理",
   processing: "处理中",
   shipped: "已发货",
@@ -12,13 +15,20 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "已取消",
 };
 
-const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-700",
-  processing: "bg-blue-100 text-blue-700",
-  shipped: "bg-purple-100 text-purple-700",
-  delivered: "bg-green-100 text-green-700",
-  cancelled: "bg-red-100 text-red-700",
-};
+async function getOrders(where: { status?: string }) {
+  return prisma.order.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+    include: { items: { include: { product: true } } },
+  });
+}
+
+async function getOrderCounts() {
+  return prisma.order.groupBy({
+    by: ["status"],
+    _count: true,
+  });
+}
 
 export default async function AdminOrdersPage({
   searchParams,
@@ -28,16 +38,17 @@ export default async function AdminOrdersPage({
   const { status: filterStatus } = await searchParams;
 
   const where = filterStatus ? { status: filterStatus } : {};
-  const orders = await prisma.order.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-    include: { items: { include: { product: true } } },
-  });
+  let orders: Awaited<ReturnType<typeof getOrders>> = [];
+  let orderCounts: Awaited<ReturnType<typeof getOrderCounts>> = [];
 
-  const orderCounts = await prisma.order.groupBy({
-    by: ["status"],
-    _count: true,
-  });
+  try {
+    [orders, orderCounts] = await Promise.all([
+      getOrders(where),
+      getOrderCounts(),
+    ]);
+  } catch (error) {
+    rethrowInProduction(error);
+  }
 
   return (
     <div>
@@ -94,8 +105,10 @@ export default async function AdminOrdersPage({
                     </span>
                   </div>
                   <div className="text-xs text-stone-400 mt-1">
-                    {new Date(order.createdAt).toLocaleString("zh-CN")} · ¥
+                    {new Date(order.createdAt).toLocaleString("zh-CN")} · $
                     {order.total.toFixed(2)}
+                    {" · "}
+                    {getPaymentLabel(order.paymentMethod)}
                   </div>
                 </div>
                 <StatusSelect
@@ -125,7 +138,7 @@ export default async function AdminOrdersPage({
                           {item.quantity}
                         </td>
                         <td className="py-0.5 text-right text-stone-600">
-                          ¥{item.price.toFixed(2)}
+                          ${item.price.toFixed(2)}
                         </td>
                       </tr>
                     ))}

@@ -61,7 +61,7 @@ export default function CartPage() {
               <Separator />
               <div className="flex justify-between text-base font-bold"><span>Total</span><span>${totalPrice.toFixed(2)}</span></div>
             </div>
-            <Button size="lg" className="w-full mt-6" asChild><a href="/api/checkout">Proceed to Checkout</a></Button>
+            <Button size="lg" className="w-full mt-6" asChild><Link href="/checkout">Proceed to Checkout</Link></Button>
             <p className="mt-4 text-xs text-center text-muted-foreground font-sans">Free worldwide shipping on orders over $150</p>
           </Card>
         </div>

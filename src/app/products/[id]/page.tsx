@@ -11,6 +11,37 @@ function parseImages(images: string): string[] {
   try { return JSON.parse(images); } catch { return []; }
 }
 
+function getStoneDetails(category: string) {
+  const details: Record<string, { material: string; stone: string; color: string }> = {
+    "Lab Diamonds": {
+      material: "Lab-grown diamond with recycled sterling silver or 14k gold vermeil",
+      stone: "Lab-grown diamond",
+      color: "Near-colorless white",
+    },
+    "Lab Sapphires": {
+      material: "Lab-grown sapphire with sterling silver or gold vermeil",
+      stone: "Lab-grown sapphire",
+      color: "Blue sapphire",
+    },
+    "Lab Emeralds": {
+      material: "Lab-grown emerald with sterling silver or gold vermeil",
+      stone: "Lab-grown emerald",
+      color: "Green emerald",
+    },
+    "Lab Rubies": {
+      material: "Lab-grown ruby with sterling silver or gold vermeil",
+      stone: "Lab-grown ruby",
+      color: "Ruby red",
+    },
+  };
+
+  return details[category] || {
+    material: "Lab-grown gemstone jewelry",
+    stone: "Lab-grown gemstone",
+    color: "As shown",
+  };
+}
+
 interface Product {
   id: string;
   name: string;
@@ -18,6 +49,15 @@ interface Product {
   price: number;
   images: string;
   category: string;
+  stoneType?: string | null;
+  metal?: string | null;
+  caratWeight?: string | null;
+  cut?: string | null;
+  color?: string | null;
+  clarity?: string | null;
+  certification?: string | null;
+  dimensions?: string | null;
+  care?: string | null;
   stock: number;
 }
 
@@ -50,6 +90,17 @@ export default function ProductDetailPage({
 
   const images = parseImages(product.images);
   const inStock = product.stock > 0;
+  const defaults = getStoneDetails(product.category);
+  const specs = [
+    ["Stone", product.stoneType || defaults.stone],
+    ["Metal", product.metal || defaults.material],
+    ["Carat Weight", product.caratWeight],
+    ["Cut", product.cut],
+    ["Color", product.color || defaults.color],
+    ["Clarity", product.clarity],
+    ["Certification", product.certification],
+    ["Dimensions", product.dimensions],
+  ].filter(([, value]) => value);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
@@ -99,7 +150,7 @@ export default function ProductDetailPage({
 
         {/* ── Info ── */}
         <div className="flex flex-col justify-center">
-          <Badge variant="secondary" className={`w-fit mb-3 ${product.category === "Agate" ? "bg-amber-400/10 text-amber-600 border-amber-400/20" : "bg-primary/10 text-primary border-primary/20"}`}>{product.category}</Badge>
+          <Badge variant="secondary" className="mb-3 w-fit rounded-sm bg-muted text-foreground">{product.category}</Badge>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight leading-tight">{product.name}</h1>
           <p className="mt-4 text-3xl font-bold text-foreground font-sans">${product.price.toFixed(2)}</p>
 
@@ -112,7 +163,9 @@ export default function ProductDetailPage({
             {inStock ? (
               <>
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
-                <span className="text-sm text-muted-foreground">In stock{product.stock <= 5 && ` — only ${product.stock} remaining`}</span>
+                <span className="text-sm text-muted-foreground">
+                  {product.stock} in stock{product.stock <= 5 && " - limited quantity"}
+                </span>
               </>
             ) : (
               <>
@@ -129,12 +182,32 @@ export default function ProductDetailPage({
           </div>
 
           {/* Details */}
-          <div className="mt-10 grid grid-cols-2 gap-4 border-t border-border/40 pt-8 font-sans">
-            <div><p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Material</p><p className="mt-1 text-sm font-medium">{product.category === "Jade" ? "Natural Hetian Jade" : "Natural Banded Agate"}</p></div>
-            <div><p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Origin</p><p className="mt-1 text-sm font-medium">{product.category === "Jade" ? "Xinjiang, China" : "Various regions, China"}</p></div>
-            <div><p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Handmade</p><p className="mt-1 text-sm font-medium">Hand-finished — patterned stones are one of a kind piece unique</p></div>
-            <div><p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Shipping</p><p className="mt-1 text-sm font-medium">Free worldwide over $150</p></div>
+          <div className="mt-10 border-t border-border/40 pt-8 font-sans">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground">Details</h2>
+            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {specs.map(([label, value]) => (
+                <div key={label}>
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
+                  <p className="mt-1 text-sm font-medium">{value}</p>
+                </div>
+              ))}
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Shipping</p>
+                <p className="mt-1 text-sm font-medium">Free worldwide over $150</p>
+              </div>
+            </div>
           </div>
+
+          {product.care && (
+            <div className="mt-8 border-t border-border/40 pt-6">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground">Care</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">{product.care}</p>
+            </div>
+          )}
+
+          <p className="mt-6 text-xs leading-5 text-muted-foreground">
+            Lab-grown gemstones are disclosed clearly. Product images and stone color may vary slightly by screen and batch.
+          </p>
         </div>
       </div>
     </div>

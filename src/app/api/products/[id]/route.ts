@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getProductById } from "@/lib/product-data";
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const product = await prisma.product.findUnique({
-    where: { id },
-  });
+  const product = await getProductById(id);
 
   if (!product) {
     return NextResponse.json({ error: "Product not found" }, { status: 404 });

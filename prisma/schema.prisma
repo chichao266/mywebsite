@@ -28,17 +28,26 @@ model SupportTicket {
 }
 
 model Product {
-  id          String      @id @default(cuid())
-  name        String
-  description String
-  price       Float
-  images      String      @default("[]")
-  category    String
-  stock       Int         @default(0)
-  featured    Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  orderItems  OrderItem[]
+  id            String      @id @default(cuid())
+  name          String
+  description   String
+  price         Float
+  images        String      @default("[]")
+  category      String
+  stoneType     String?
+  metal         String?
+  caratWeight   String?
+  cut           String?
+  color         String?
+  clarity       String?
+  certification String?
+  dimensions    String?
+  care          String?
+  stock         Int         @default(0)
+  featured      Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  orderItems    OrderItem[]
 }
 
 model Order {
@@ -51,6 +60,7 @@ model Order {
   zip             String
   total           Float
   status          String      @default("pending")
+  paymentMethod   String      @default("paypal")
   stripeSessionId String?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt

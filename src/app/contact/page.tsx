@@ -3,125 +3,76 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function ContactPage() {
+  const methods = [
+    {
+      title: "Email",
+      detail: "hello@lumeajewelry.com",
+      desc: "For product questions, order support, and wholesale inquiries.",
+    },
+    {
+      title: "Studio hours",
+      detail: "Mon-Fri",
+      desc: "We typically respond within one business day.",
+    },
+  ];
+
+  const faqs = [
+    {
+      q: "Are your diamonds real diamonds?",
+      a: "Yes. Lab-grown diamonds have the same optical, physical, and chemical properties as mined diamonds. We clearly disclose them as lab-grown.",
+    },
+    {
+      q: "Are your sapphires, rubies, and emeralds natural?",
+      a: "Our colored gemstone line is built around lab-grown stones. Product pages use clear terms such as lab-grown sapphire or lab-grown ruby.",
+    },
+    {
+      q: "Do you ship internationally?",
+      a: "Yes. We plan the site for customers outside Mainland China, with international checkout and shipping language.",
+    },
+    {
+      q: "Can I request a custom piece?",
+      a: "For launch, we recommend focusing on ready-to-ship essentials. Custom work can be added later once product operations are stable.",
+    },
+  ];
+
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
-      <div className="max-w-3xl mx-auto">
-        <p className="text-sm font-medium tracking-widest uppercase text-primary/80 mb-4">
-          Get in Touch
-        </p>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
-          Contact Us
-        </h1>
-        <p className="mt-4 text-muted-foreground text-base sm:text-lg leading-relaxed">
-          Have a question about a piece? Want to inquire about custom orders?
-          We&apos;d love to hear from you.
+    <div className="container mx-auto px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-3xl">
+        <p className="mb-4 text-xs font-medium uppercase tracking-[0.28em] text-primary/70">Contact</p>
+        <h1 className="font-serif text-4xl font-bold tracking-tight">How can we help?</h1>
+        <p className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg">
+          Questions about lab-grown diamonds, colored gemstones, sizing, or shipping? Send us a note.
         </p>
 
-        {/* Contact Methods */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {[
-            {
-              title: "Email",
-              detail: "hello@agatelier.com",
-              desc: "We typically respond within 24 hours.",
-              icon: (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                  />
-                </svg>
-              ),
-            },
-            {
-              title: "WhatsApp",
-              detail: "+86 138 0000 0000",
-              desc: "Available 9:00 – 18:00 Beijing time (UTC+8).",
-              icon: (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
-                  />
-                </svg>
-              ),
-            },
-          ].map((method) => (
-            <Card key={method.title} className="border-border/60">
+        <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {methods.map((method) => (
+            <Card key={method.title} className="rounded-md border-border/60 shadow-none">
               <CardContent className="p-6">
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary mb-4">
-                  {method.icon}
-                </div>
-                <h3 className="font-semibold">{method.title}</h3>
-                <p className="mt-1 text-sm font-mono text-foreground">
-                  {method.detail}
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {method.desc}
-                </p>
+                <h2 className="font-serif text-xl font-semibold">{method.title}</h2>
+                <p className="mt-2 text-sm font-medium text-foreground">{method.detail}</p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{method.desc}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* FAQ */}
-        <div className="mt-16 border-t border-border/40 pt-12">
-          <h2 className="text-xl font-bold tracking-tight mb-8">
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-6">
-            {[
-              {
-                q: "Are your stones natural or treated?",
-                a: "All Agatelier pieces are 100% natural stone — no dyes, no heat treatment, no synthetic materials. Each piece comes with a certificate of authenticity.",
-              },
-              {
-                q: "Do you ship internationally?",
-                a: "Yes. We ship worldwide. Orders over $150 qualify for free shipping. Delivery typically takes 5–12 business days depending on your location.",
-              },
-              {
-                q: "What is your return policy?",
-                a: "We accept returns within 30 days of delivery. The piece must be unworn and in its original packaging. Custom orders are final sale.",
-              },
-              {
-                q: "Can I request a custom piece?",
-                a: "Absolutely. Contact us via WhatsApp or email with your requirements — preferred stone type, size, budget — and we'll work with our artisans to create something unique for you.",
-              },
-            ].map((faq) => (
+        <div id="faq" className="mt-16 border-t pt-12">
+          <h2 className="mb-8 font-serif text-2xl font-bold tracking-tight">Frequently Asked Questions</h2>
+          <div className="space-y-7">
+            {faqs.map((faq) => (
               <div key={faq.q}>
-                <h3 className="font-semibold text-sm">{faq.q}</h3>
-                <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                  {faq.a}
-                </p>
+                <h3 className="font-semibold">{faq.q}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{faq.a}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* CTA */}
         <div className="mt-16 text-center">
-          <p className="text-sm text-muted-foreground mb-4">
-            Or explore our collection
-          </p>
-          <Link href="/products">
-            <Button variant="outline" size="lg">
-              Browse Collection
-            </Button>
-          </Link>
+          <p className="mb-4 text-sm text-muted-foreground">Ready to browse the collection?</p>
+          <Button asChild variant="outline" size="lg">
+            <Link href="/products">Shop Jewelry</Link>
+          </Button>
         </div>
       </div>
     </div>

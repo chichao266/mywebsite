@@ -21,10 +21,15 @@ function getMetadataBase(): URL | undefined {
 
 export const metadata: Metadata = {
   metadataBase: getMetadataBase(),
-  title: { default: "Agatelier — Handcrafted Agate Jewelry", template: "%s | Agatelier" },
-  description: "Discover handcrafted agate jewelry.",
-  keywords: ["agate jewelry", "natural stone jewelry"],
-  openGraph: { siteName: "Agatelier", title: "Agatelier", description: "Handcrafted agate jewelry.", type: "website" },
+  title: { default: "Lumea — Lab-Grown Diamond & Gemstone Jewelry", template: "%s | Lumea" },
+  description: "Modern lab-grown diamond and colored gemstone jewelry for everyday brilliance.",
+  keywords: ["lab-grown diamond jewelry", "lab-grown gemstone jewelry", "colored gemstone jewelry"],
+  openGraph: {
+    siteName: "Lumea",
+    title: "Lumea",
+    description: "Modern lab-grown diamond and colored gemstone jewelry.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,4 +1,4 @@
-const PLACEHOLDER_RE = /^(change-me|replace-with|agatelier-.*-change-me)/i;
+const PLACEHOLDER_RE = /^(change-me|replace-with|.*-change-me)/i;
 
 function clean(value: string | undefined): string | undefined {
   const trimmed = value?.trim();

@@ -1,6 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import { getProductById } from "@/lib/product-data";
 import { notFound } from "next/navigation";
 import ProductForm from "../product-form";
+
+export const dynamic = "force-dynamic";
 
 export default async function EditProductPage({
   params,
@@ -8,7 +10,7 @@ export default async function EditProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const product = await prisma.product.findUnique({ where: { id } });
+  const product = await getProductById(id);
 
   if (!product) notFound();
 
@@ -22,6 +24,15 @@ export default async function EditProductPage({
           description: product.description,
           price: product.price,
           category: product.category,
+          stoneType: product.stoneType || "",
+          metal: product.metal || "",
+          caratWeight: product.caratWeight || "",
+          cut: product.cut || "",
+          color: product.color || "",
+          clarity: product.clarity || "",
+          certification: product.certification || "",
+          dimensions: product.dimensions || "",
+          care: product.care || "",
           stock: product.stock,
           featured: product.featured,
           images: product.images,

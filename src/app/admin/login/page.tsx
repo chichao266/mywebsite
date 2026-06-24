@@ -13,28 +13,45 @@ export default function AdminLoginPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (!email.trim() || !password) {
+      setError("请输入邮箱和密码");
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
 
-    const res = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
 
-    if (res.ok) {
-      router.push("/admin");
-    } else {
-      const data = await res.json();
+      if (res.ok) {
+        router.push("/admin");
+        return;
+      }
+
+      const text = await res.text();
+      let data: { error?: string } = {};
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {}
       setError(data.error || "登录失败");
+    } catch {
+      setError("网络请求失败，请刷新后重试");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-50">
       <div className="w-full max-w-sm p-8 bg-white rounded-2xl shadow-sm border border-stone-200">
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-stone-800">Agatelier</h1>
+          <h1 className="text-2xl font-bold text-stone-800">Lumea</h1>
           <p className="text-sm text-stone-500 mt-1">后台管理登录</p>
         </div>
 
@@ -47,7 +64,7 @@ export default function AdminLoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              placeholder="admin@agatelier.com"
+              placeholder="admin@lumeajewelry.com"
             />
           </div>
 
