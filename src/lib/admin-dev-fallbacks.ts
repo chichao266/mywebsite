@@ -7,6 +7,10 @@ export function isProductionDeployment() {
 }
 
 export function canUseDemoData() {
+  if (process.env.ENABLE_DEMO_DATA === "true") {
+    return true;
+  }
+
   return !isProductionDeployment();
 }
 
