@@ -22,6 +22,7 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("paypal");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -36,14 +37,43 @@ export default function CheckoutPage() {
 
   function update(field: keyof typeof form, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
+    setFieldErrors((current) => {
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setFieldErrors({});
 
     if (items.length === 0) {
       setError("Your cart is empty.");
+      return;
+    }
+
+    const requiredFields: Array<[keyof typeof form, string]> = [
+      ["name", "Please enter your name."],
+      ["email", "Please enter your email address."],
+      ["address", "Please enter your shipping address."],
+      ["city", "Please enter your city."],
+      ["state", "Please enter your state or province."],
+      ["zip", "Please enter your ZIP or postal code."],
+    ];
+    const nextFieldErrors = requiredFields.reduce<Record<string, string>>((errors, [field, message]) => {
+      if (!form[field].trim()) errors[field] = message;
+      return errors;
+    }, {});
+
+    if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      nextFieldErrors.email = "Please enter a valid email address.";
+    }
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors);
+      setError("Please complete the highlighted fields.");
       return;
     }
 
@@ -101,17 +131,17 @@ export default function CheckoutPage() {
         <h1 className="mt-3 font-serif text-3xl font-bold tracking-tight">Checkout</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid gap-10 lg:grid-cols-[1fr_380px]">
+      <form onSubmit={handleSubmit} noValidate className="grid gap-10 lg:grid-cols-[1fr_380px]">
         <div className="space-y-8">
           <Card className="rounded-md border-border/60 p-6 shadow-none">
             <h2 className="font-serif text-xl font-semibold">Shipping details</h2>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <Field label="Name" value={form.name} onChange={(value) => update("name", value)} required />
-              <Field label="Email" type="email" value={form.email} onChange={(value) => update("email", value)} required />
-              <Field label="Address" value={form.address} onChange={(value) => update("address", value)} required wide />
-              <Field label="City" value={form.city} onChange={(value) => update("city", value)} required />
-              <Field label="State / Province" value={form.state} onChange={(value) => update("state", value)} required />
-              <Field label="ZIP / Postal code" value={form.zip} onChange={(value) => update("zip", value)} required />
+              <Field label="Name" value={form.name} onChange={(value) => update("name", value)} error={fieldErrors.name} required />
+              <Field label="Email" type="email" value={form.email} onChange={(value) => update("email", value)} error={fieldErrors.email} required />
+              <Field label="Address" value={form.address} onChange={(value) => update("address", value)} error={fieldErrors.address} required wide />
+              <Field label="City" value={form.city} onChange={(value) => update("city", value)} error={fieldErrors.city} required />
+              <Field label="State / Province" value={form.state} onChange={(value) => update("state", value)} error={fieldErrors.state} required />
+              <Field label="ZIP / Postal code" value={form.zip} onChange={(value) => update("zip", value)} error={fieldErrors.zip} required />
             </div>
           </Card>
 
@@ -186,6 +216,7 @@ function Field({
   onChange,
   type = "text",
   required,
+  error,
   wide,
 }: {
   label: string;
@@ -193,6 +224,7 @@ function Field({
   onChange: (value: string) => void;
   type?: string;
   required?: boolean;
+  error?: string;
   wide?: boolean;
 }) {
   return (
@@ -202,9 +234,13 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        required={required}
-        className="mt-2 w-full rounded-md border border-border bg-white px-3 py-2 text-sm outline-none transition-colors focus:border-foreground"
+        aria-required={required}
+        aria-invalid={Boolean(error)}
+        className={`mt-2 w-full rounded-md border bg-white px-3 py-2 text-sm outline-none transition-colors focus:border-foreground ${
+          error ? "border-destructive" : "border-border"
+        }`}
       />
+      {error && <span className="mt-2 block text-xs text-destructive">{error}</span>}
     </label>
   );
 }
