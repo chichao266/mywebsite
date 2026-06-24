@@ -4,40 +4,70 @@ import { getSetting } from "@/lib/settings";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 
 export default async function AboutPage() {
-  const { title, content } = await getSetting("about");
+  const { content } = await getSetting("about");
+
+  const standards = [
+    {
+      title: "Clearly lab-grown",
+      desc: "We label every diamond and colored gemstone by origin so customers know exactly what they are buying.",
+    },
+    {
+      title: "Daily proportions",
+      desc: "Our settings are designed to sit comfortably, layer easily, and bring fine jewelry into ordinary days.",
+    },
+    {
+      title: "Color with restraint",
+      desc: "Sapphire, ruby, emerald, and diamond pieces are edited for clean color rather than loud trend cycles.",
+    },
+  ];
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
-      <section className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
-        <p className="text-sm font-medium tracking-widest uppercase text-primary/80 mb-4">Our Story</p>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold tracking-tight leading-[1.15]">
-          Stones are not just found.<br /><span className="text-primary">They are chosen.</span>
-        </h1>
+    <div>
+      <section className="bg-white">
+        <div className="container mx-auto px-4 py-16 text-center sm:px-6 sm:py-20">
+          <p className="text-xs font-medium uppercase tracking-[0.28em] text-primary/70">Our Standards</p>
+          <h1 className="mx-auto mt-4 max-w-3xl font-serif text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+            Fine jewelry for a more transparent generation.
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
+            Avoryne is built around lab-grown diamonds and colored gemstones: brilliant materials,
+            modern proportions, and clear language from first glance to checkout.
+          </p>
+        </div>
       </section>
 
-      <section className="max-w-3xl mx-auto">
-        <div className="text-muted-foreground leading-relaxed space-y-6 font-sans" dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }} />
-      </section>
-
-      <section className="max-w-3xl mx-auto mt-20 sm:mt-24">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-          {[
-            { title: "Natural Only", desc: "We never sell dyed, treated, or synthetic stones. What you see is what the earth made." },
-            { title: "Direct Sourcing", desc: "No middlemen. We buy directly from the artisans who carve each piece." },
-            { title: "Quiet Luxury", desc: "We don't shout. Our stones speak for themselves — in the cool weight of a well-cut agate, in the way light moves across its bands." },
-          ].map((v) => (
-            <div key={v.title} className="text-center p-6">
-              <h3 className="text-lg font-serif font-semibold">{v.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed font-sans">{v.desc}</p>
+      <section className="border-y bg-background">
+        <div className="container mx-auto grid gap-0 px-4 sm:px-6 md:grid-cols-3">
+          {standards.map((item) => (
+            <div key={item.title} className="border-border/60 py-10 md:border-r md:px-8 md:last:border-r-0">
+              <h2 className="font-serif text-xl font-semibold">{item.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="max-w-3xl mx-auto mt-20 sm:mt-24 text-center border-t border-border/40 pt-16">
-        <h2 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight">Ready to find your stone?</h2>
-        <p className="mt-3 text-muted-foreground font-sans">Browse our collection of handcrafted agate jewelry.</p>
-        <div className="mt-8"><Link href="/products"><Button size="lg">Explore Collection</Button></Link></div>
+      <section className="container mx-auto px-4 py-16 sm:px-6 sm:py-20">
+        <div className="mx-auto max-w-3xl">
+          <div
+            className="space-y-6 text-base leading-8 text-muted-foreground"
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }}
+          />
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 pb-16 sm:px-6 sm:pb-20">
+        <div className="mx-auto max-w-3xl border-t pt-12 text-center">
+          <h2 className="font-serif text-3xl font-bold tracking-tight">Explore the new direction</h2>
+          <p className="mt-3 text-muted-foreground">
+            Start with lab diamonds, then add sapphire, ruby, and emerald color as your everyday wardrobe evolves.
+          </p>
+          <div className="mt-8">
+            <Button asChild size="lg">
+              <Link href="/products">Shop Jewelry</Link>
+            </Button>
+          </div>
+        </div>
       </section>
     </div>
   );

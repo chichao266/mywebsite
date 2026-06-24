@@ -3,6 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/password";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { getOptionalSecret, getRequiredSecret } from "@/lib/env";
+import { canUseDemoData } from "@/lib/admin-dev-fallbacks";
+
+const DEV_ADMIN_EMAIL = "admin@avoryne.com";
+const DEV_ADMIN_PASSWORD = "admin123456";
 
 async function createToken(payload: string): Promise<string> {
   const secret = getRequiredSecret("ADMIN_SECRET");
@@ -19,6 +23,27 @@ async function createToken(payload: string): Promise<string> {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
   return `${payload}:${sigHex}`;
+}
+
+function canUseDevAdmin() {
+  return canUseDemoData();
+}
+
+async function createAdminResponse(user: { id: string; email: string }) {
+  const token = await createToken(
+    JSON.stringify({ userId: user.id, email: user.email })
+  );
+
+  const response = NextResponse.json({ success: true });
+  response.cookies.set("admin_token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24,
+  });
+
+  return response;
 }
 
 export async function POST(request: NextRequest) {
@@ -41,7 +66,20 @@ export async function POST(request: NextRequest) {
 
   const { email, password } = await request.json();
 
-  const user = await prisma.user.findUnique({ where: { email } });
+  let user;
+  try {
+    user = await prisma.user.findUnique({ where: { email } });
+  } catch {
+    if (canUseDevAdmin() && email === DEV_ADMIN_EMAIL && password === DEV_ADMIN_PASSWORD) {
+      return createAdminResponse({ id: "local-dev-admin", email: DEV_ADMIN_EMAIL });
+    }
+
+    return NextResponse.json(
+      { error: "本地数据库未连接。开发预览可使用 admin@avoryne.com / admin123456" },
+      { status: 503 }
+    );
+  }
+
   if (
     !user ||
     !verifyPassword(password, user.password, {
@@ -60,18 +98,5 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const token = await createToken(
-    JSON.stringify({ userId: user.id, email: user.email })
-  );
-
-  const response = NextResponse.json({ success: true });
-  response.cookies.set("admin_token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24,
-  });
-
-  return response;
+  return createAdminResponse({ id: user.id, email: user.email });
 }

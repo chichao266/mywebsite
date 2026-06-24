@@ -78,7 +78,7 @@ export default function SupportPage() {
             <Mail className="w-5 h-5 text-primary shrink-0" />
             <div>
               <p className="text-sm font-medium">Email</p>
-              <p className="text-xs text-muted-foreground">support@agatelier.com</p>
+              <p className="text-xs text-muted-foreground">support@avoryne.com</p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-xl border">

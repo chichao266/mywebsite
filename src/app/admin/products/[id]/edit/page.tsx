@@ -15,6 +15,15 @@ type Product = {
   price: number;
   images: string;
   category: string;
+  stoneType?: string | null;
+  metal?: string | null;
+  caratWeight?: string | null;
+  cut?: string | null;
+  color?: string | null;
+  clarity?: string | null;
+  certification?: string | null;
+  dimensions?: string | null;
+  care?: string | null;
   stock: number;
   featured: boolean;
 };
@@ -56,6 +65,15 @@ export default function EditProductPage() {
           price: String(product.price),
           images: parseImages(product.images),
           category: product.category,
+          stoneType: product.stoneType || "",
+          metal: product.metal || "",
+          caratWeight: product.caratWeight || "",
+          cut: product.cut || "",
+          color: product.color || "",
+          clarity: product.clarity || "",
+          certification: product.certification || "",
+          dimensions: product.dimensions || "",
+          care: product.care || "",
           stock: String(product.stock),
           featured: product.featured,
         }}

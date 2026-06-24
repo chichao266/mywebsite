@@ -1,17 +1,36 @@
 import { prisma } from "@/lib/prisma";
+import { canUseDemoData } from "@/lib/admin-dev-fallbacks";
+import { demoProducts } from "@/lib/demo-products";
+
+export const dynamic = "force-dynamic";
+
+function canUseDemoAdmin() {
+  return canUseDemoData();
+}
 
 export default async function AdminDashboard() {
-  const [productCount, orderCount, userCount, ticketCount] = await Promise.all([
-    prisma.product.count(),
-    prisma.order.count(),
-    prisma.user.count(),
-    prisma.supportTicket.count({ where: { status: "open" } }),
-  ]);
+  let productCount = 0;
+  let orderCount = 0;
+  let userCount = 0;
+  let ticketCount = 0;
+  let recentOrders: Array<{ id: string; customerName: string; total: number; status: string; createdAt: Date }> = [];
 
-  const recentOrders = await prisma.order.findMany({
-    take: 5,
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    [productCount, orderCount, userCount, ticketCount] = await Promise.all([
+      prisma.product.count(),
+      prisma.order.count(),
+      prisma.user.count(),
+      prisma.supportTicket.count({ where: { status: "open" } }),
+    ]);
+
+    recentOrders = await prisma.order.findMany({
+      take: 5,
+      orderBy: { createdAt: "desc" },
+    });
+  } catch {
+    if (!canUseDemoAdmin()) throw new Error("Database is required in production.");
+    productCount = demoProducts.length;
+  }
 
   const stats = [
     { label: "商品总数", value: productCount, icon: "💎" },
@@ -57,7 +76,7 @@ export default async function AdminDashboard() {
               {recentOrders.map((order) => (
                 <tr key={order.id} className="border-b border-stone-50">
                   <td className="py-2 text-stone-700">{order.customerName}</td>
-                  <td className="py-2 text-stone-700">¥{order.total.toFixed(2)}</td>
+                  <td className="py-2 text-stone-700">${order.total.toFixed(2)}</td>
                   <td className="py-2">
                     <StatusBadge status={order.status} />
                   </td>

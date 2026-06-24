@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 
 const STATUS_OPTIONS = [
+  { value: "pending_payment", label: "等待付款" },
   { value: "pending", label: "待处理" },
   { value: "processing", label: "处理中" },
   { value: "shipped", label: "已发货" },
@@ -11,6 +12,7 @@ const STATUS_OPTIONS = [
 ];
 
 const STATUS_COLORS: Record<string, string> = {
+  pending_payment: "bg-amber-100 text-amber-700 border-amber-200",
   pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
   processing: "bg-blue-100 text-blue-700 border-blue-200",
   shipped: "bg-purple-100 text-purple-700 border-purple-200",

@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
-import { deleteProduct } from "./actions";
+import { getProducts } from "@/lib/product-data";
 import DeleteButton from "./delete-button";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminProductsPage() {
-  const products = await prisma.product.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const products = await getProducts();
 
   return (
     <div>
@@ -45,7 +44,7 @@ export default async function AdminProductsPage() {
                   </td>
                   <td className="px-4 py-3 text-stone-600">{p.category}</td>
                   <td className="px-4 py-3 text-stone-700">
-                    ¥{p.price.toFixed(2)}
+                    ${p.price.toFixed(2)}
                   </td>
                   <td className="px-4 py-3 text-stone-600">{p.stock}</td>
                   <td className="px-4 py-3">

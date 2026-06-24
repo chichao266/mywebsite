@@ -11,7 +11,11 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "已取消",
 };
 
-const CATEGORY_LABELS: Record<string, string> = {  agate: "玛瑙",
+const CATEGORY_LABELS: Record<string, string> = {
+  "Lab Diamonds": "培育钻石",
+  "Lab Sapphires": "培育蓝宝石",
+  "Lab Emeralds": "培育祖母绿",
+  "Lab Rubies": "培育红宝石",
 };
 
 export default async function AdminReportsPage() {
@@ -38,7 +42,7 @@ export default async function AdminReportsPage() {
           { label: "用户总数", value: stats.totalUsers, color: "text-purple-600" },
           {
             label: "总营收",
-            value: `¥${stats.totalRevenue.toFixed(2)}`,
+            value: `$${stats.totalRevenue.toFixed(2)}`,
             color: "text-amber-600",
           },
         ].map((card) => (
@@ -105,10 +109,10 @@ export default async function AdminReportsPage() {
                 <div
                   key={i}
                   className="flex-1 flex flex-col items-center gap-1"
-                  title={`¥${order.total.toFixed(2)} - ${new Date(order.createdAt).toLocaleDateString("zh-CN")}`}
+                  title={`$${order.total.toFixed(2)} - ${new Date(order.createdAt).toLocaleDateString("zh-CN")}`}
                 >
                   <span className="text-xs text-stone-400">
-                    ¥{order.total.toFixed(0)}
+                    ${order.total.toFixed(0)}
                   </span>
                   <div
                     className="w-full bg-emerald-400 rounded-t"

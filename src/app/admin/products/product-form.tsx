@@ -8,7 +8,16 @@ const defaultData: ProductFormData = {
   name: "",
   description: "",
   price: 0,
-  category: "agate",
+  category: "Lab Diamonds",
+  stoneType: "Lab-grown diamond",
+  metal: "",
+  caratWeight: "",
+  cut: "",
+  color: "",
+  clarity: "",
+  certification: "",
+  dimensions: "",
+  care: "",
   stock: 0,
   featured: false,
   images: "[]",
@@ -59,6 +68,33 @@ export default function ProductForm({
           />
         </div>
 
+        <div className="col-span-2 border-t border-stone-100 pt-4">
+          <h2 className="text-sm font-semibold text-stone-800">珠宝规格</h2>
+          <p className="mt-1 text-xs text-stone-500">这些信息会显示在商品详情页，建议用英文填写。</p>
+        </div>
+
+        <TextField label="Stone Type" value={data.stoneType || ""} onChange={(value) => update("stoneType", value)} placeholder="Lab-grown diamond" />
+        <TextField label="Metal" value={data.metal || ""} onChange={(value) => update("metal", value)} placeholder="14k gold vermeil" />
+        <TextField label="Carat Weight" value={data.caratWeight || ""} onChange={(value) => update("caratWeight", value)} placeholder="0.50 ct total" />
+        <TextField label="Cut" value={data.cut || ""} onChange={(value) => update("cut", value)} placeholder="Round brilliant" />
+        <TextField label="Color" value={data.color || ""} onChange={(value) => update("color", value)} placeholder="Near-colorless" />
+        <TextField label="Clarity" value={data.clarity || ""} onChange={(value) => update("clarity", value)} placeholder="VS equivalent" />
+        <TextField label="Certification" value={data.certification || ""} onChange={(value) => update("certification", value)} placeholder="Certificate available" />
+        <TextField label="Dimensions" value={data.dimensions || ""} onChange={(value) => update("dimensions", value)} placeholder="6 mm setting" />
+
+        <div className="col-span-2">
+          <label className="block text-sm font-medium text-stone-700 mb-1">
+            Care
+          </label>
+          <textarea
+            rows={3}
+            value={data.care || ""}
+            onChange={(e) => update("care", e.target.value)}
+            placeholder="Clean with a soft cloth and store separately."
+            className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+        </div>
+
         {/* Description */}
         <div className="col-span-2">
           <label className="block text-sm font-medium text-stone-700 mb-1">
@@ -75,7 +111,7 @@ export default function ProductForm({
         {/* Price */}
         <div>
           <label className="block text-sm font-medium text-stone-700 mb-1">
-            价格 (¥)
+            价格 ($)
           </label>
           <input
             type="number"
@@ -111,7 +147,11 @@ export default function ProductForm({
             value={data.category}
             onChange={(e) => update("category", e.target.value)}
             className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          >            <option value="agate">Agate 玛瑙</option>
+          >
+            <option value="Lab Diamonds">Lab Diamonds 培育钻石</option>
+            <option value="Lab Sapphires">Lab Sapphires 培育蓝宝石</option>
+            <option value="Lab Emeralds">Lab Emeralds 培育祖母绿</option>
+            <option value="Lab Rubies">Lab Rubies 培育红宝石</option>
           </select>
         </div>
 
@@ -148,5 +188,32 @@ export default function ProductForm({
         </button>
       </div>
     </form>
+  );
+}
+
+function TextField({
+  label,
+  value,
+  onChange,
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-stone-700 mb-1">
+        {label}
+      </label>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+      />
+    </div>
   );
 }
