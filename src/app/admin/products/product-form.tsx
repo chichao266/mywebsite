@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createProduct, updateProduct, type ProductFormData } from "./actions";
 
+const maxImages = 5;
+
 const defaultData: ProductFormData = {
   name: "",
   description: "",
@@ -36,13 +38,72 @@ export default function ProductForm({
     initialData || defaultData
   );
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState<number | null>(null);
+  const [error, setError] = useState("");
+
+  function getImages() {
+    try {
+      const images = JSON.parse(data.images);
+      return Array.isArray(images) ? images.filter((url) => typeof url === "string") : [];
+    } catch {
+      return [];
+    }
+  }
 
   function update(field: keyof ProductFormData, value: string | number | boolean) {
     setData((prev) => ({ ...prev, [field]: value }));
   }
 
+  function updateImages(images: string[]) {
+    update("images", JSON.stringify(images));
+  }
+
+  async function handleImageUpload(
+    e: React.ChangeEvent<HTMLInputElement>,
+    index?: number
+  ) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    setError("");
+    setUploading(index ?? -1);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+
+      if (!res.ok) {
+        throw new Error(json.error || "图片上传失败");
+      }
+
+      const images = getImages();
+      if (index !== undefined && index < images.length) {
+        images[index] = json.url;
+      } else {
+        images.push(json.url);
+      }
+      updateImages(images);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "图片上传失败");
+    } finally {
+      setUploading(null);
+    }
+  }
+
+  function removeImage(index: number) {
+    updateImages(getImages().filter((_, i) => i !== index));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError("");
     setSaving(true);
     if (isEdit) {
       await updateProduct(productId!, data);
@@ -51,8 +112,16 @@ export default function ProductForm({
     }
   }
 
+  const images = getImages();
+
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl space-y-5">
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-4">
         {/* Name */}
         <div className="col-span-2">
@@ -167,6 +236,52 @@ export default function ProductForm({
           <label htmlFor="featured" className="text-sm text-stone-700">
             首页推荐
           </label>
+        </div>
+
+        <div className="col-span-2">
+          <label className="block text-sm font-medium text-stone-700 mb-2">
+            商品图片 ({images.length}/{maxImages})
+          </label>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            {images.map((url, index) => (
+              <div key={`${url}-${index}`} className="relative group aspect-square rounded-lg border border-stone-200 bg-stone-50 overflow-hidden">
+                <img src={url} alt="" className="h-full w-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => removeImage(index)}
+                  className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-xs text-white opacity-90 hover:bg-red-700"
+                  aria-label="删除图片"
+                >
+                  ×
+                </button>
+                <label className="absolute inset-x-0 bottom-0 cursor-pointer bg-black/60 px-2 py-1 text-center text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  {uploading === index ? "上传中..." : "替换"}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={(e) => handleImageUpload(e, index)}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            ))}
+
+            {images.length < maxImages && (
+              <label className="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-stone-300 bg-stone-50 text-sm text-stone-500 transition-colors hover:border-emerald-500 hover:text-emerald-700">
+                <span className="text-xl">+</span>
+                <span>{uploading === -1 ? "上传中..." : "上传图片"}</span>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={(e) => handleImageUpload(e)}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </div>
+          <p className="mt-2 text-xs text-stone-500">
+            支持 JPG、PNG、WebP，单张不超过 5MB。建议商品主图使用正方形或接近正方形。
+          </p>
         </div>
       </div>
 

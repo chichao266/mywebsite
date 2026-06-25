@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
+import { put } from "@vercel/blob";
 import path from "path";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -23,22 +23,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "File is too large" }, { status: 413 });
   }
 
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-
-  // Generate unique filename
   const timestamp = Date.now();
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const filename = `${timestamp}-${crypto.randomUUID()}-${safeName}`;
+  const filename = `products/${timestamp}-${crypto.randomUUID()}-${safeName}`;
 
-  // Ensure public/images/ exists
-  const uploadDir = path.join(process.cwd(), "public", "images");
-  await mkdir(uploadDir, { recursive: true });
+  const blob = await put(filename, file, {
+    access: "public",
+  });
 
-  const filepath = path.join(uploadDir, filename);
-  await writeFile(filepath, buffer);
-
-  // Return the public URL
-  const url = `/images/${filename}`;
-  return NextResponse.json({ url });
+  return NextResponse.json({ url: blob.url });
 }
