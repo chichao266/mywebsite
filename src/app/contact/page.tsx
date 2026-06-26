@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { getSetting } from "@/lib/settings";
+import { sanitizeHtml } from "@/lib/sanitize-html";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const { content } = await getSetting("contact_us");
   const methods = [
     {
       title: "Email",
-      detail: "hello@avoryne.com",
+      detail: "hello@avoryne.net",
       desc: "For product questions, order support, and wholesale inquiries.",
     },
     {
@@ -43,6 +46,10 @@ export default function ContactPage() {
         <p className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg">
           Questions about lab-grown diamonds, colored gemstones, sizing, or shipping? Send us a note.
         </p>
+        <div
+          className="mt-8 space-y-4 text-sm leading-7 text-muted-foreground"
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }}
+        />
 
         <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2">
           {methods.map((method) => (

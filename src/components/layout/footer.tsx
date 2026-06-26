@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { getSetting } from "@/lib/settings";
 
-export function Footer() {
+export async function Footer() {
+  const { content: brandIntro } = await getSetting("brand_intro");
+
   return (
     <footer className="border-t bg-white">
       <div className="container mx-auto px-4 py-14 sm:px-6 lg:py-16">
@@ -12,7 +15,7 @@ export function Footer() {
               Avoryne
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-6 text-muted-foreground">
-              Modern lab-grown diamond and colored gemstone jewelry for everyday brilliance.
+              {brandIntro || "Modern lab-grown diamond and colored gemstone jewelry for everyday brilliance."}
             </p>
           </div>
 
@@ -39,6 +42,8 @@ export function Footer() {
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li><Link href="/shipping" className="hover:text-foreground">Shipping & Delivery</Link></li>
               <li><Link href="/returns" className="hover:text-foreground">Returns & Exchanges</Link></li>
+              <li><Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-foreground">Terms of Service</Link></li>
               <li><Link href="/contact#faq" className="hover:text-foreground">FAQ</Link></li>
             </ul>
           </div>

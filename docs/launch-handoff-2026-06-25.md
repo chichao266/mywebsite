@@ -45,9 +45,9 @@ The site is ready for real product setup and storefront testing. Payment collect
 
 - Created one admin user for setup:
   - Email: `admin@avoryne.com`
-  - Password: `admin123456`
+  - Password: changed after setup; do not store plaintext passwords in this handoff document.
 - The email is a placeholder login value, not a real mailbox unless separately created.
-- The password should be changed before serious public launch.
+- Store the current password only in a secure password manager.
 
 ### Environment variables
 
@@ -79,7 +79,7 @@ Payment is not fully open. PayPal and bank transfer were discussed, but real che
 
 ## Known Risks Before Full Public Launch
 
-- Admin password is still a simple setup password and should be changed.
+- Admin password should be stored only in a secure password manager and rotated before handoff to another operator.
 - Payment flow is not final.
 - Product content is not yet real.
 - Legal pages should be reviewed before real sales:
@@ -96,24 +96,23 @@ Payment is not fully open. PayPal and bank transfer were discussed, but real che
 
 ## Recommended Next Steps
 
-1. Change the admin password.
-2. Add 3-5 real test products through the admin panel.
-3. For each product, upload real product images and confirm they show on:
+1. Add 3-5 real test products through the admin panel.
+2. For each product, upload real product images and confirm they show on:
    - product list page,
    - product detail page,
    - cart,
    - checkout.
-4. Review the checkout page and keep payment disabled or manual-only until PayPal is restored.
-5. Replace placeholder policy/contact text with real business information.
-6. Test the full buyer journey:
+3. Review the checkout page and keep payment disabled or manual-only until PayPal is restored.
+4. Replace placeholder policy/contact text with real business information.
+5. Test the full buyer journey:
    - browse products,
    - open product detail,
    - add to cart,
    - checkout form,
    - order creation,
    - admin order view.
-7. Decide the domain plan for `yuanjc.net`.
-8. When product and policy content are ready, connect the final domain to Vercel.
+6. Decide the domain plan for `yuanjc.net`.
+7. When product and policy content are ready, connect the final domain to Vercel.
 
 ## Useful URLs
 

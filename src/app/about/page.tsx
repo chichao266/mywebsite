@@ -4,7 +4,7 @@ import { getSetting } from "@/lib/settings";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 
 export default async function AboutPage() {
-  const { content } = await getSetting("about");
+  const { content } = await getSetting("our_story");
 
   const standards = [
     {

@@ -9,6 +9,8 @@ const PRESET_KEYS = [
   { key: "contact_us", title: "联系我们", desc: "Contact Us 页面内容" },
   { key: "shipping", title: "配送说明", desc: "Shipping & Delivery 页面" },
   { key: "returns", title: "退换政策", desc: "Returns & Exchanges 页面" },
+  { key: "privacy", title: "隐私政策", desc: "Privacy Policy 页面" },
+  { key: "terms", title: "服务条款", desc: "Terms of Service 页面" },
   { key: "faq", title: "常见问题", desc: "FAQ 问答内容" },
 ];
 
