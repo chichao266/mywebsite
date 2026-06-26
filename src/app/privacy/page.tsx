@@ -1,6 +1,8 @@
 import { getSetting } from "@/lib/settings";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 
+export const dynamic = "force-dynamic";
+
 export default async function PrivacyPage() {
   const { title, content } = await getSetting("privacy");
 

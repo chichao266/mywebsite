@@ -1,6 +1,8 @@
 import { getSetting } from "@/lib/settings";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 
+export const dynamic = "force-dynamic";
+
 export default async function ReturnsPage() {
   const { content } = await getSetting("returns");
 

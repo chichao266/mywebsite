@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { getSetting } from "@/lib/settings";
 import { sanitizeHtml } from "@/lib/sanitize-html";
 
+export const dynamic = "force-dynamic";
+
 export default async function AboutPage() {
   const { content } = await getSetting("our_story");
 
