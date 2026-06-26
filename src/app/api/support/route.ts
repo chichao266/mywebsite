@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { notifyAdminOfNewTicket } from "@/lib/admin-notifications";
 import { prisma } from "@/lib/prisma";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 
@@ -21,8 +22,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
-    await prisma.supportTicket.create({
+    const ticket = await prisma.supportTicket.create({
       data: { name, email, subject, message },
+    });
+
+    await notifyAdminOfNewTicket({
+      id: ticket.id,
+      name,
+      email,
+      subject,
+      message,
     });
 
     return NextResponse.json({ success: true, message: "Ticket submitted. We'll get back to you soon!" });

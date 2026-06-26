@@ -69,6 +69,17 @@ The site is ready for real product setup and storefront testing. Payment collect
   - Uploaded image URL is public and returns `200 OK`.
   - Upload API rejects unauthenticated users.
 
+### Admin email notifications
+
+- New checkout orders and support form tickets can send email alerts to the store operator.
+- The notification code is safe when email is not configured: orders and tickets still save normally.
+- Required Vercel environment variables:
+  - `RESEND_API_KEY`
+  - `ADMIN_NOTIFICATION_EMAIL`
+- Optional Vercel environment variable:
+  - `ADMIN_NOTIFICATION_FROM`
+- `ADMIN_NOTIFICATION_EMAIL` may contain more than one recipient, separated by commas.
+
 ## Important Current State
 
 The site is not using Shopify for the current deployment. Shopify still matters only if the existing domain `yuanjc.net` is currently connected there.

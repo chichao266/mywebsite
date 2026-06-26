@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isProductionDeployment } from "@/lib/admin-dev-fallbacks";
+import { notifyAdminOfNewOrder } from "@/lib/admin-notifications";
 import { getPaymentConfig, type PaymentMethod } from "@/lib/payment-config";
 import { getProductById } from "@/lib/product-data";
 
@@ -102,6 +103,23 @@ export async function POST(req: NextRequest) {
           })),
         },
       },
+    });
+
+    await notifyAdminOfNewOrder({
+      id: order.id,
+      customerName,
+      customerEmail,
+      address,
+      city,
+      state,
+      zip,
+      total,
+      paymentMethod,
+      items: resolvedItems.map((item) => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.product.price,
+      })),
     });
 
     const config = getPaymentConfig();
