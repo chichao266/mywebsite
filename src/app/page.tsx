@@ -53,11 +53,11 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
 
         <div className="container relative z-10 mx-auto flex min-h-[82vh] items-center px-4 py-20 sm:px-6">
-          <div className="max-w-2xl text-white">
+          <div className="w-full max-w-[22rem] text-white sm:max-w-2xl">
             <p className="mb-5 text-xs font-medium uppercase tracking-[0.32em] text-white/75">
               Lab-grown fine jewelry
             </p>
-            <h1 className="font-serif text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="max-w-full break-words font-serif text-[2rem] font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
               Diamonds and color, made for every day.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-white/78 sm:text-lg">
