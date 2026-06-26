@@ -58,7 +58,7 @@ export function Header() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex shrink-0 items-center gap-2.5">
             <Logo />
-            <span className="hidden font-serif text-xl font-bold tracking-tight text-foreground sm:inline">Avoryne</span>
+            <span className="font-serif text-lg font-bold tracking-tight text-foreground sm:text-xl">Avoryne</span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">
