@@ -3,31 +3,31 @@ VALUES
   (
     'base-copy-brand-intro-2026-06-26',
     'brand_intro',
-    '品牌简介',
+    'Brand Introduction',
     'Avoryne creates modern lab-grown diamond and colored gemstone jewelry with clear material language and everyday polish.'
   ),
   (
     'base-copy-our-story-2026-06-26',
     'our_story',
-    '品牌故事',
+    'Our Story',
     '<p>Avoryne was created for customers who want the polish of fine jewelry with clearer material language. Our collection centers on lab-grown diamonds and lab-grown colored gemstones, edited into pieces that feel modern, wearable, and quietly refined.</p><p>We believe jewelry should be easy to understand: what the stone is, how it is described, and why the design belongs in an everyday wardrobe. Each product page is written to make material, color, cut, and care details clear before checkout.</p><p>Our style is clean and international: luminous stones, balanced proportions, and settings made for daily elegance rather than occasional ceremony.</p>'
   ),
   (
     'base-copy-contact-us-2026-06-26',
     'contact_us',
-    '联系我们',
+    'Contact',
     '<h2>Email</h2><p>hello@avoryne.net</p><h2>Support Hours</h2><p>Monday to Friday. We typically respond within one business day.</p><h2>Order Help</h2><p>Please include your order number when contacting us about an existing order.</p>'
   ),
   (
     'base-copy-shipping-2026-06-26',
     'shipping',
-    '配送说明',
+    'Shipping & Delivery',
     '<h2>Processing Time</h2><p>Each Avoryne order is prepared with a final quality check before shipment. Please allow <strong>2-3 business days</strong> for order processing before dispatch.</p><h2>Shipping Options</h2><p>Standard International shipping usually takes <strong>7-14 business days</strong>. Express International shipping usually takes <strong>3-5 business days</strong>, depending on the destination and carrier availability.</p><h2>Shipping Fees</h2><p>Standard shipping is $9.90, with complimentary standard shipping on orders over $150. Express shipping is $24.90 where available.</p><h2>Tracking</h2><p>Once your order ships, we will send a confirmation email with tracking details. Tracking updates may take 24-48 hours to appear after the carrier receives the package.</p><h2>Customs and Import Fees</h2><p>International customers are responsible for any customs duties, taxes, brokerage fees, or import charges required by the destination country.</p>'
   ),
   (
     'base-copy-returns-2026-06-26',
     'returns',
-    '退换政策',
+    'Returns & Exchanges',
     '<h2>Return Window</h2><p>You may return unworn, unused, non-custom items within <strong>30 days</strong> of delivery. Items must be returned with their original packaging and any included certificates, cards, or accessories.</p><h2>How to Start a Return</h2><p>Email us at hello@avoryne.net with your order number and the item you would like to return. We will reply with return instructions within one business day.</p><h2>Non-Returnable Items</h2><p>Custom orders, personalized pieces, engraved items, final sale items, and items showing signs of wear cannot be returned unless they arrive damaged or defective.</p><h2>Refunds</h2><p>After we receive and inspect your return, approved refunds will be issued to the original payment method. Shipping fees, customs duties, and import fees are not refundable.</p><h2>Exchanges</h2><p>Exchanges may be available for eligible items within the return window, subject to stock availability.</p>'
   ),
   (
