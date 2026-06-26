@@ -52,7 +52,7 @@ export default async function AdminOrdersPage({
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-stone-800 mb-6">订单管理</h1>
+      <h1 className="mb-5 text-xl font-bold text-stone-800 sm:mb-6">订单管理</h1>
 
       {/* Status filter */}
       <div className="flex gap-2 mb-4 flex-wrap">
@@ -90,17 +90,14 @@ export default async function AdminOrdersPage({
       ) : (
         <div className="space-y-3">
           {orders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-white rounded-xl border border-stone-200 p-4"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-stone-800">
+            <div key={order.id} className="bg-white rounded-xl border border-stone-200 p-4">
+              <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+                    <span className="text-sm font-medium text-stone-800 break-words">
                       {order.customerName}
                     </span>
-                    <span className="text-xs text-stone-400">
+                    <span className="break-all text-xs text-stone-400">
                       {order.customerEmail}
                     </span>
                   </div>
@@ -111,27 +108,29 @@ export default async function AdminOrdersPage({
                     {getPaymentLabel(order.paymentMethod)}
                   </div>
                 </div>
-                <StatusSelect
-                  orderId={order.id}
-                  currentStatus={order.status}
-                  updateAction={updateOrderStatus}
-                />
+                <div className="shrink-0">
+                  <StatusSelect
+                    orderId={order.id}
+                    currentStatus={order.status}
+                    updateAction={updateOrderStatus}
+                  />
+                </div>
               </div>
 
               {/* Order items */}
               <div className="border-t border-stone-100 pt-3">
-                <table className="w-full text-xs">
+                <table className="w-full table-fixed text-xs">
                   <thead>
                     <tr className="text-stone-400">
-                      <th className="text-left pb-1 font-normal">商品</th>
-                      <th className="text-right pb-1 font-normal">数量</th>
-                      <th className="text-right pb-1 font-normal">单价</th>
+                      <th className="pb-1 text-left font-normal">商品</th>
+                      <th className="w-12 pb-1 text-right font-normal">数量</th>
+                      <th className="w-20 pb-1 text-right font-normal">单价</th>
                     </tr>
                   </thead>
                   <tbody>
                     {order.items.map((item) => (
                       <tr key={item.id}>
-                        <td className="py-0.5 text-stone-700">
+                        <td className="py-0.5 pr-2 text-stone-700 break-words">
                           {item.product.name}
                         </td>
                         <td className="py-0.5 text-right text-stone-600">
@@ -147,7 +146,7 @@ export default async function AdminOrdersPage({
               </div>
 
               {/* Address */}
-              <div className="mt-3 pt-3 border-t border-stone-100 text-xs text-stone-400">
+              <div className="mt-3 border-t border-stone-100 pt-3 text-xs leading-5 text-stone-400 break-words">
                 地址：{order.address}, {order.city}, {order.state}{" "}
                 {order.zip}
               </div>

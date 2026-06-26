@@ -27,7 +27,7 @@ export default async function AdminTicketsPage({
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-stone-800 mb-6">客服工单</h1>
+      <h1 className="mb-5 text-xl font-bold text-stone-800 sm:mb-6">客服工单</h1>
 
       {/* Filter tabs */}
       <div className="flex gap-2 mb-4 flex-wrap">
@@ -59,32 +59,31 @@ export default async function AdminTicketsPage({
       ) : (
         <div className="space-y-3">
           {tickets.map((ticket) => (
-            <div
-              key={ticket.id}
-              className="bg-white rounded-xl border border-stone-200 p-4"
-            >
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <h3 className="text-sm font-medium text-stone-800">
+            <div key={ticket.id} className="bg-white rounded-xl border border-stone-200 p-4">
+              <div className="mb-2 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <h3 className="break-words text-sm font-medium text-stone-800">
                     {ticket.subject}
                   </h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-stone-500">
+                  <div className="mt-1 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+                    <span className="break-all text-xs text-stone-500">
                       {ticket.name} ({ticket.email})
                     </span>
-                    <span className="text-xs text-stone-300">·</span>
+                    <span className="hidden text-xs text-stone-300 sm:inline">·</span>
                     <span className="text-xs text-stone-400">
                       {new Date(ticket.createdAt).toLocaleString("zh-CN")}
                     </span>
                   </div>
                 </div>
-                <TicketStatusSelect
-                  ticketId={ticket.id}
-                  currentStatus={ticket.status}
-                  updateAction={updateTicketStatus}
-                />
+                <div className="shrink-0">
+                  <TicketStatusSelect
+                    ticketId={ticket.id}
+                    currentStatus={ticket.status}
+                    updateAction={updateTicketStatus}
+                  />
+                </div>
               </div>
-              <p className="text-sm text-stone-600 bg-stone-50 rounded-lg p-3 mt-2">
+              <p className="mt-2 whitespace-pre-wrap break-words rounded-lg bg-stone-50 p-3 text-sm leading-6 text-stone-600">
                 {ticket.message}
               </p>
             </div>

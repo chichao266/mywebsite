@@ -36,7 +36,7 @@ export default function TicketStatusSelect({
     <select
       value={currentStatus}
       onChange={handleChange}
-      className={`text-xs px-2 py-1 rounded-full border cursor-pointer font-medium ${COLORS[currentStatus] || "bg-stone-100"}`}
+      className={`min-h-9 rounded-full border px-3 py-1.5 text-xs font-medium cursor-pointer ${COLORS[currentStatus] || "bg-stone-100"}`}
     >
       {OPTIONS.map((opt) => (
         <option key={opt.value} value={opt.value}>

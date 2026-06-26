@@ -41,7 +41,7 @@ export default function StatusSelect({
     <select
       value={currentStatus}
       onChange={handleChange}
-      className={`text-xs px-2 py-1 rounded-full border font-medium cursor-pointer ${STATUS_COLORS[currentStatus] || "bg-stone-100 text-stone-600 border-stone-200"}`}
+      className={`min-h-9 rounded-full border px-3 py-1.5 text-xs font-medium cursor-pointer ${STATUS_COLORS[currentStatus] || "bg-stone-100 text-stone-600 border-stone-200"}`}
     >
       {STATUS_OPTIONS.map((opt) => (
         <option key={opt.value} value={opt.value}>
