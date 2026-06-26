@@ -8,8 +8,8 @@ export default async function ContactPage() {
   const { content } = await getSetting("contact_us");
   const methods = [
     {
-      title: "Email",
-      detail: "hello@avoryne.net",
+      title: "Contact Form",
+      detail: "Use our support form",
       desc: "For product questions, order support, and wholesale inquiries.",
     },
     {

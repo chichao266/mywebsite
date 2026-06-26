@@ -39,7 +39,7 @@ export const demoSystemSettings = [
     id: "demo-system-contact-email",
     key: "system_contact_email",
     title: "联系邮箱",
-    content: "hello@avoryne.net",
+    content: "",
   },
   {
     id: "demo-system-phone",
@@ -81,14 +81,14 @@ export const demoSiteSettings = [
     key: "contact_us",
     title: "联系我们",
     content:
-      "<h2>Email</h2><p>hello@avoryne.net</p><h2>Support Hours</h2><p>Monday to Friday. We typically respond within one business day.</p>",
+      "<h2>Contact Form</h2><p>Please use our support form for product questions, order support, and wholesale inquiries.</p><h2>Support Hours</h2><p>Monday to Friday. We typically respond within one business day.</p>",
   },
   {
     id: "demo-shipping",
     key: "shipping",
     title: "配送说明",
     content:
-      "<h2>Processing Time</h2><p>Each Avoryne order is prepared with a final quality check before shipment. Please allow 2-3 business days for order processing before dispatch.</p><h2>Shipping Options</h2><p>Standard International shipping usually takes 7-14 business days. Express International shipping usually takes 3-5 business days, depending on the destination and carrier availability.</p>",
+      "<h2>Processing Time</h2><p>Each Avoryne order is prepared with a final quality check before shipment. Please allow 2-3 business days for order processing before dispatch.</p><h2>Air Shipping</h2><p>Avoryne ships jewelry orders by air. After dispatch, delivery usually takes 5-7 business days, depending on the destination, customs clearance, and carrier availability.</p>",
   },
   {
     id: "demo-returns",

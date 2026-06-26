@@ -77,8 +77,8 @@ export default function SupportPage() {
           <div className="flex items-center gap-3 p-4 rounded-xl border">
             <Mail className="w-5 h-5 text-primary shrink-0" />
             <div>
-              <p className="text-sm font-medium">Email</p>
-              <p className="text-xs text-muted-foreground">support@avoryne.com</p>
+              <p className="text-sm font-medium">Contact Form</p>
+              <p className="text-xs text-muted-foreground">Use the form below</p>
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-xl border">
