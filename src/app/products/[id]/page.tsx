@@ -33,6 +33,11 @@ function getStoneDetails(category: string) {
       stone: "Lab-grown ruby",
       color: "Ruby red",
     },
+    "Other Gemstones": {
+      material: "Colored gemstone with 925 sterling silver",
+      stone: "Colored gemstone",
+      color: "As shown",
+    },
   };
 
   return details[category] || {

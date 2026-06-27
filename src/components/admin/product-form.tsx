@@ -131,6 +131,7 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
     { value: "Lab Sapphires", label: "Lab Sapphires", color: "bg-blue-50 text-blue-700 border-blue-200" },
     { value: "Lab Emeralds", label: "Lab Emeralds", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
     { value: "Lab Rubies", label: "Lab Rubies", color: "bg-rose-50 text-rose-700 border-rose-200" },
+    { value: "Other Gemstones", label: "Other Gemstones", color: "bg-violet-50 text-violet-700 border-violet-200" },
   ];
 
   const maxImages = 5;

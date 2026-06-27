@@ -61,7 +61,7 @@ export async function getProducts(filters: ProductFilters = {}) {
     whereParts.push({ category: "Lab Diamonds" });
   }
   if (filters.stoneGroup === "Color") {
-    whereParts.push({ category: { in: ["Lab Sapphires", "Lab Emeralds", "Lab Rubies"] } });
+    whereParts.push({ category: { in: ["Lab Sapphires", "Lab Emeralds", "Lab Rubies", "Other Gemstones"] } });
   }
 
   try {

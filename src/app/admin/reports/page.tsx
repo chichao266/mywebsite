@@ -16,6 +16,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   "Lab Sapphires": "培育蓝宝石",
   "Lab Emeralds": "培育祖母绿",
   "Lab Rubies": "培育红宝石",
+  "Other Gemstones": "其他宝石",
 };
 
 export default async function AdminReportsPage() {

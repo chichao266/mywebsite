@@ -238,6 +238,7 @@ export default function ProductForm({
             <option value="Lab Sapphires">Lab Sapphires 培育蓝宝石</option>
             <option value="Lab Emeralds">Lab Emeralds 培育祖母绿</option>
             <option value="Lab Rubies">Lab Rubies 培育红宝石</option>
+            <option value="Other Gemstones">Other Gemstones 其他宝石</option>
           </select>
         </div>
 
