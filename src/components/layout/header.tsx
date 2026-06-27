@@ -33,7 +33,10 @@ export function Header() {
   const [user, setUser] = useState<UserData | null>(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const isHome = pathname === "/";
+  const overImage = isHome && !scrolled && !mobileMenuOpen;
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -54,6 +57,13 @@ export function Header() {
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const updateScrolled = () => setScrolled(window.scrollY > 16);
+    updateScrolled();
+    window.addEventListener("scroll", updateScrolled, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrolled);
+  }, []);
+
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
@@ -63,11 +73,20 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur-xl">
+      <header
+        data-over-image={overImage ? "true" : undefined}
+        className={`top-0 z-50 w-full transition-colors duration-300 md:sticky md:border-b md:bg-white/95 md:backdrop-blur-xl ${
+          isHome
+            ? overImage
+              ? "fixed border-transparent bg-transparent"
+              : "fixed border-b bg-white/95 backdrop-blur-xl"
+            : "sticky border-b bg-white/95 backdrop-blur-xl"
+        }`}
+      >
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
           <Link href="/" className="flex shrink-0 items-center gap-2.5">
             <Logo />
-            <span className="font-serif text-lg font-bold tracking-tight text-foreground sm:text-xl">Avoryne</span>
+            <span className="font-serif text-lg font-bold tracking-tight text-foreground transition-colors sm:text-xl">Avoryne</span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex">

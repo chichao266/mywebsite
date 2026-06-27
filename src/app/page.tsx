@@ -8,6 +8,8 @@ export const dynamic = "force-dynamic";
 
 const HERO_IMAGE =
   "/images/avoryne-home-hero.png";
+const MOBILE_HERO_IMAGE =
+  "/images/avoryne-mobile-hero.png";
 
 function parseImages(images: string): string[] {
   try {
@@ -44,15 +46,20 @@ export default async function HomePage() {
 
   return (
     <div>
-      <section className="relative min-h-[64vh] overflow-hidden bg-stone-950 sm:min-h-[82vh]">
+      <section className="relative min-h-[100svh] overflow-hidden bg-stone-950 sm:min-h-[82vh]">
+        <img
+          src={MOBILE_HERO_IMAGE}
+          alt="Woman wearing blue gemstone earrings and a statement ring"
+          className="absolute inset-0 h-full w-full object-cover object-center sm:hidden"
+        />
         <img
           src={HERO_IMAGE}
           alt="Woman wearing blue gemstone earrings and a statement ring"
-          className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
+          className="absolute inset-0 hidden h-full w-full object-cover object-center sm:block"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/10 sm:from-black/70 sm:via-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/20 to-black/18 sm:bg-gradient-to-r sm:from-black/70 sm:via-black/35 sm:to-black/10" />
 
-        <div className="container relative z-10 mx-auto flex min-h-[64vh] items-center px-4 py-14 sm:min-h-[82vh] sm:px-6 sm:py-20">
+        <div className="container relative z-10 mx-auto flex min-h-[100svh] items-end px-4 pb-16 pt-24 sm:min-h-[82vh] sm:items-center sm:px-6 sm:py-20">
           <div className="w-full max-w-[22rem] text-white sm:max-w-2xl">
             <p className="mb-5 text-xs font-medium uppercase tracking-[0.32em] text-white/75">
               Lab-grown fine jewelry
