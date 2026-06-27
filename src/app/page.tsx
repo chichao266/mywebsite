@@ -7,7 +7,7 @@ import { getFeaturedProducts } from "@/lib/product-data";
 export const dynamic = "force-dynamic";
 
 const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=1800&auto=format&fit=crop&q=85";
+  "/images/avoryne-home-hero.png";
 
 function parseImages(images: string): string[] {
   try {
@@ -47,7 +47,7 @@ export default async function HomePage() {
       <section className="relative min-h-[82vh] overflow-hidden bg-stone-950">
         <img
           src={HERO_IMAGE}
-          alt="Diamond ring in a clean modern setting"
+          alt="Woman wearing blue gemstone earrings and a statement ring"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
@@ -58,7 +58,7 @@ export default async function HomePage() {
               Lab-grown fine jewelry
             </p>
             <h1 className="max-w-full break-words font-serif text-[2rem] font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
-              Diamonds and color, made for every day.
+              Wear color like a signature.
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-white/78 sm:text-lg">
               Avoryne creates modern lab-grown diamond and colored gemstone jewelry with clear origin,
