@@ -23,8 +23,11 @@ export async function Footer() {
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">Shop</h3>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li><Link href="/products" className="hover:text-foreground">All Jewelry</Link></li>
-              <li><Link href="/products?category=Lab%20Diamonds" className="hover:text-foreground">Lab Diamonds</Link></li>
-              <li><Link href="/products?category=Lab%20Sapphires" className="hover:text-foreground">Colored Gemstones</Link></li>
+              <li><Link href="/products?collection=new" className="hover:text-foreground">New In</Link></li>
+              <li><Link href="/products?type=Ring" className="hover:text-foreground">Rings</Link></li>
+              <li><Link href="/products?type=Necklace" className="hover:text-foreground">Necklaces</Link></li>
+              <li><Link href="/products?stone=Diamond" className="hover:text-foreground">Diamonds</Link></li>
+              <li><Link href="/products?stone=Color" className="hover:text-foreground">Color</Link></li>
             </ul>
           </div>
 

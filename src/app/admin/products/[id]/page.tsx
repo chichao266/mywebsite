@@ -24,6 +24,7 @@ export default async function EditProductPage({
           description: product.description,
           price: product.price,
           category: product.category,
+          productType: product.productType || "Ring",
           stoneType: product.stoneType || "",
           metal: product.metal || "",
           caratWeight: product.caratWeight || "",

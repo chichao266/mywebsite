@@ -22,6 +22,7 @@ export async function PUT(
         price: parseFloat(body.price),
         images,
         category: body.category,
+        productType: clean(body.productType),
         stoneType: clean(body.stoneType),
         metal: clean(body.metal),
         caratWeight: clean(body.caratWeight),

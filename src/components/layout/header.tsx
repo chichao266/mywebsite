@@ -9,9 +9,13 @@ import { Logo } from "@/components/logo";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const navLinks = [
-  { href: "/products", label: "Shop" },
-  { href: "/products?category=Lab%20Diamonds", label: "Diamonds" },
-  { href: "/products?category=Lab%20Sapphires", label: "Color" },
+  { href: "/products?collection=new", label: "New In" },
+  { href: "/products?type=Ring", label: "Rings" },
+  { href: "/products?type=Necklace", label: "Necklaces" },
+  { href: "/products?type=Earrings", label: "Earrings" },
+  { href: "/products?type=Bracelet", label: "Bracelets" },
+  { href: "/products?stone=Diamond", label: "Diamonds" },
+  { href: "/products?stone=Color", label: "Color" },
   { href: "/about", label: "About" },
 ];
 

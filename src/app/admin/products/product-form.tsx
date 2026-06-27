@@ -11,6 +11,7 @@ const defaultData: ProductFormData = {
   description: "",
   price: 0,
   category: "Lab Diamonds",
+  productType: "Ring",
   stoneType: "Lab-grown diamond",
   metal: "",
   caratWeight: "",
@@ -143,7 +144,7 @@ export default function ProductForm({
         </div>
 
         <TextField label="Stone Type" value={data.stoneType || ""} onChange={(value) => update("stoneType", value)} placeholder="Lab-grown diamond" />
-        <TextField label="Metal" value={data.metal || ""} onChange={(value) => update("metal", value)} placeholder="14k gold vermeil" />
+        <TextField label="Metal" value={data.metal || ""} onChange={(value) => update("metal", value)} placeholder="925 Sterling Silver" />
         <TextField label="Carat Weight" value={data.caratWeight || ""} onChange={(value) => update("caratWeight", value)} placeholder="0.50 ct total" />
         <TextField label="Cut" value={data.cut || ""} onChange={(value) => update("cut", value)} placeholder="Round brilliant" />
         <TextField label="Color" value={data.color || ""} onChange={(value) => update("color", value)} placeholder="Near-colorless" />
@@ -210,7 +211,23 @@ export default function ProductForm({
         {/* Category */}
         <div>
           <label className="block text-sm font-medium text-stone-700 mb-1">
-            分类
+            商品类型
+          </label>
+          <select
+            value={data.productType || "Ring"}
+            onChange={(e) => update("productType", e.target.value)}
+            className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option value="Ring">Ring 戒指</option>
+            <option value="Necklace">Necklace 项链</option>
+            <option value="Earrings">Earrings 耳环</option>
+            <option value="Bracelet">Bracelet 手链</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-stone-700 mb-1">
+            宝石分类
           </label>
           <select
             value={data.category}

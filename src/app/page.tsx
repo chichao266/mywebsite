@@ -36,10 +36,10 @@ export default async function HomePage() {
   ];
 
   const categories = [
-    { name: "Lab Diamonds", href: "/products?category=Lab%20Diamonds", tone: "border-neutral-300" },
-    { name: "Sapphires", href: "/products?category=Lab%20Sapphires", tone: "border-blue-300" },
-    { name: "Emeralds", href: "/products?category=Lab%20Emeralds", tone: "border-emerald-300" },
-    { name: "Rubies", href: "/products?category=Lab%20Rubies", tone: "border-rose-300" },
+    { name: "Rings", href: "/products?type=Ring", tone: "border-neutral-300" },
+    { name: "Necklaces", href: "/products?type=Necklace", tone: "border-blue-300" },
+    { name: "Earrings", href: "/products?type=Earrings", tone: "border-emerald-300" },
+    { name: "Color", href: "/products?stone=Color", tone: "border-rose-300" },
   ];
 
   return (
@@ -96,8 +96,8 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="mb-9 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.25em] text-primary/70">Shop by stone</p>
-              <h2 className="mt-3 font-serif text-3xl font-bold tracking-tight">A cleaner way to collect color.</h2>
+              <p className="text-xs font-medium uppercase tracking-[0.25em] text-primary/70">Shop the edit</p>
+              <h2 className="mt-3 font-serif text-3xl font-bold tracking-tight">Start with the piece you wear most.</h2>
             </div>
             <Link href="/products" className="text-sm font-medium text-foreground hover:text-primary">
               View all pieces

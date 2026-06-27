@@ -5,6 +5,7 @@ export type DemoProduct = {
   price: number;
   images: string;
   category: string;
+  productType: string | null;
   stoneType: string | null;
   metal: string | null;
   caratWeight: string | null;
@@ -38,8 +39,9 @@ export const demoProducts: DemoProduct[] = [
       "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=900&auto=format&fit=crop&q=85"
     ),
     category: "Lab Diamonds",
+    productType: "Earrings",
     stoneType: "Lab-grown diamond",
-    metal: "14k gold vermeil",
+    metal: "925 Sterling Silver",
     caratWeight: "0.50 ct total",
     cut: "Round brilliant",
     color: "Near-colorless",
@@ -63,8 +65,9 @@ export const demoProducts: DemoProduct[] = [
       "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=900&auto=format&fit=crop&q=85"
     ),
     category: "Lab Sapphires",
+    productType: "Ring",
     stoneType: "Lab-grown sapphire",
-    metal: "14k gold vermeil",
+    metal: "925 Sterling Silver",
     caratWeight: "1.20 ct center stone",
     cut: "Oval",
     color: "Deep blue",
@@ -88,8 +91,9 @@ export const demoProducts: DemoProduct[] = [
       "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?w=900&auto=format&fit=crop&q=85"
     ),
     category: "Lab Emeralds",
+    productType: "Necklace",
     stoneType: "Lab-grown emerald",
-    metal: "Sterling silver",
+    metal: "925 Sterling Silver",
     caratWeight: "0.40 ct",
     cut: "Baguette",
     color: "Emerald green",
@@ -113,8 +117,9 @@ export const demoProducts: DemoProduct[] = [
       "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=900&auto=format&fit=crop&q=85"
     ),
     category: "Lab Rubies",
+    productType: "Earrings",
     stoneType: "Lab-grown ruby",
-    metal: "Gold vermeil",
+    metal: "Gold-plated 925 Sterling Silver",
     caratWeight: "0.18 ct total",
     cut: "Round",
     color: "Ruby red",

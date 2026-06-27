@@ -14,22 +14,22 @@ function parseImages(images: string): string[] {
 function getStoneDetails(category: string) {
   const details: Record<string, { material: string; stone: string; color: string }> = {
     "Lab Diamonds": {
-      material: "Lab-grown diamond with recycled sterling silver or 14k gold vermeil",
+      material: "Lab-grown diamond with 925 sterling silver",
       stone: "Lab-grown diamond",
       color: "Near-colorless white",
     },
     "Lab Sapphires": {
-      material: "Lab-grown sapphire with sterling silver or gold vermeil",
+      material: "Lab-grown sapphire with 925 sterling silver",
       stone: "Lab-grown sapphire",
       color: "Blue sapphire",
     },
     "Lab Emeralds": {
-      material: "Lab-grown emerald with sterling silver or gold vermeil",
+      material: "Lab-grown emerald with 925 sterling silver",
       stone: "Lab-grown emerald",
       color: "Green emerald",
     },
     "Lab Rubies": {
-      material: "Lab-grown ruby with sterling silver or gold vermeil",
+      material: "Lab-grown ruby with 925 sterling silver",
       stone: "Lab-grown ruby",
       color: "Ruby red",
     },

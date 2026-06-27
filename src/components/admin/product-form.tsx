@@ -12,6 +12,7 @@ interface ProductFormData {
   price: string;
   images: string[];
   category: string;
+  productType?: string;
   stoneType?: string;
   metal?: string;
   caratWeight?: string;
@@ -44,6 +45,7 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
       price: "",
       images: [],
       category: "Lab Diamonds",
+      productType: "Ring",
       stoneType: "Lab-grown diamond",
       metal: "",
       caratWeight: "",
@@ -181,7 +183,7 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
           <p className="mt-1 text-xs text-muted-foreground">These details appear on the public product page.</p>
         </div>
         <SpecInput label="Stone Type" name="stoneType" value={form.stoneType || ""} onChange={handleChange} placeholder="Lab-grown diamond" />
-        <SpecInput label="Metal" name="metal" value={form.metal || ""} onChange={handleChange} placeholder="14k gold vermeil" />
+        <SpecInput label="Metal" name="metal" value={form.metal || ""} onChange={handleChange} placeholder="925 Sterling Silver" />
         <SpecInput label="Carat Weight" name="caratWeight" value={form.caratWeight || ""} onChange={handleChange} placeholder="0.50 ct total" />
         <SpecInput label="Cut" name="cut" value={form.cut || ""} onChange={handleChange} placeholder="Round brilliant" />
         <SpecInput label="Color" name="color" value={form.color || ""} onChange={handleChange} placeholder="Near-colorless" />
@@ -201,9 +203,24 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
         </div>
       </div>
 
-      {/* Category */}
       <div>
-        <label className="block text-sm font-medium mb-1.5">Category</label>
+        <label className="block text-sm font-medium mb-1.5">Product Type</label>
+        <select
+          name="productType"
+          value={form.productType || "Ring"}
+          onChange={handleChange}
+          className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+        >
+          <option value="Ring">Ring</option>
+          <option value="Necklace">Necklace</option>
+          <option value="Earrings">Earrings</option>
+          <option value="Bracelet">Bracelet</option>
+        </select>
+      </div>
+
+      {/* Stone category */}
+      <div>
+        <label className="block text-sm font-medium mb-1.5">Stone Category</label>
         <div className="flex gap-3">
           {categories.map((cat) => (
             <label key={cat.value} className={`cursor-pointer flex items-center gap-2 px-4 py-2 rounded-md border transition-all ${form.category === cat.value ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"}`}>

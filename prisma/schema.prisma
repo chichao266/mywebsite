@@ -34,6 +34,7 @@ model Product {
   price         Float
   images        String      @default("[]")
   category      String
+  productType   String?
   stoneType     String?
   metal         String?
   caratWeight   String?

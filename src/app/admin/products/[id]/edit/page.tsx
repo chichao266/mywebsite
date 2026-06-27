@@ -15,6 +15,7 @@ type Product = {
   price: number;
   images: string;
   category: string;
+  productType?: string | null;
   stoneType?: string | null;
   metal?: string | null;
   caratWeight?: string | null;
@@ -65,6 +66,7 @@ export default function EditProductPage() {
           price: String(product.price),
           images: parseImages(product.images),
           category: product.category,
+          productType: product.productType || "Ring",
           stoneType: product.stoneType || "",
           metal: product.metal || "",
           caratWeight: product.caratWeight || "",

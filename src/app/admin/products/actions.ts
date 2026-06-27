@@ -10,6 +10,7 @@ export type ProductFormData = {
   description: string;
   price: number;
   category: string;
+  productType?: string;
   stoneType?: string;
   metal?: string;
   caratWeight?: string;
