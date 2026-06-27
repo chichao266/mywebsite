@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { MessageCircle, Package, Search, Settings, ShoppingBag, User, LogOut } from "lucide-react";
+import { Menu, MessageCircle, Package, Search, Settings, ShoppingBag, User, LogOut, X } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { SearchDialog } from "@/components/search-dialog";
 import { Logo } from "@/components/logo";
@@ -32,6 +32,7 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [user, setUser] = useState<UserData | null>(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,6 +49,10 @@ export function Header() {
     document.addEventListener("mousedown", click);
     return () => document.removeEventListener("mousedown", click);
   }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -134,9 +139,40 @@ export function Header() {
                 </span>
               )}
             </IconLink>
+            <button
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="relative rounded-md p-2 text-foreground/70 transition-colors hover:bg-muted hover:text-foreground md:hidden"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
       </header>
+      {mobileMenuOpen && (
+        <div className="sticky top-16 z-40 border-b bg-white/95 shadow-sm backdrop-blur-xl md:hidden">
+          <nav className="container mx-auto grid grid-cols-2 gap-2 px-4 py-4 sm:px-6">
+            {navLinks.map((link) => {
+              const active = pathname === link.href || (link.href.startsWith("/products?") && pathname === "/products");
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`rounded-md border px-4 py-3 text-sm font-medium transition-colors ${
+                    active
+                      ? "border-primary/30 bg-primary/10 text-primary"
+                      : "border-border/70 bg-white text-foreground/75 hover:border-foreground/20 hover:bg-muted"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
