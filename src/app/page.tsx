@@ -44,7 +44,7 @@ export default async function HomePage() {
 
   return (
     <div>
-      <section className="relative min-h-[76vh] overflow-hidden bg-stone-950 sm:min-h-[82vh]">
+      <section className="relative min-h-[64vh] overflow-hidden bg-stone-950 sm:min-h-[82vh]">
         <img
           src={HERO_IMAGE}
           alt="Woman wearing blue gemstone earrings and a statement ring"
@@ -52,7 +52,7 @@ export default async function HomePage() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/10 sm:from-black/70 sm:via-black/35" />
 
-        <div className="container relative z-10 mx-auto flex min-h-[76vh] items-center px-4 py-20 sm:min-h-[82vh] sm:px-6">
+        <div className="container relative z-10 mx-auto flex min-h-[64vh] items-center px-4 py-14 sm:min-h-[82vh] sm:px-6 sm:py-20">
           <div className="w-full max-w-[22rem] text-white sm:max-w-2xl">
             <p className="mb-5 text-xs font-medium uppercase tracking-[0.32em] text-white/75">
               Lab-grown fine jewelry
@@ -60,28 +60,16 @@ export default async function HomePage() {
             <h1 className="max-w-full break-words font-serif text-[2rem] font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
               Wear color like a signature.
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-white/78 sm:text-lg">
-              Avoryne creates modern lab-grown diamond and colored gemstone jewelry with clear origin,
-              refined settings, and an easy international sensibility.
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row">
               <Button asChild size="lg" className="bg-white px-8 text-stone-950 hover:bg-white/90">
                 <Link href="/products">Shop the Collection</Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white/60 bg-white/10 px-8 text-white hover:bg-white/20"
-              >
-                <Link href="/about">Our Standards</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-border/60 bg-white">
+      <section className="hidden border-b border-border/60 bg-white md:block">
         <div className="container mx-auto grid gap-0 px-4 sm:px-6 md:grid-cols-3">
           {values.map((item) => (
             <div key={item.title} className="border-border/60 py-9 md:border-r md:px-8 md:last:border-r-0">
@@ -103,15 +91,15 @@ export default async function HomePage() {
               View all pieces
             </Link>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
             {categories.map((category) => (
               <Link
                 key={category.name}
                 href={category.href}
-                className={`group border-t-2 ${category.tone} bg-white p-6 transition-colors hover:bg-muted/40`}
+                className={`group border-t-2 ${category.tone} bg-white p-4 transition-colors hover:bg-muted/40 sm:p-6`}
               >
-                <p className="font-serif text-xl font-semibold">{category.name}</p>
-                <p className="mt-8 text-sm text-muted-foreground group-hover:text-foreground">Explore</p>
+                <p className="font-serif text-lg font-semibold sm:text-xl">{category.name}</p>
+                <p className="mt-5 text-sm text-muted-foreground group-hover:text-foreground sm:mt-8">Explore</p>
               </Link>
             ))}
           </div>

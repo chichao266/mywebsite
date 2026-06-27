@@ -54,19 +54,19 @@ export default async function ProductsPage({ searchParams }: Props) {
   return (
     <div>
       <section className="border-b bg-white">
-        <div className="container mx-auto px-4 py-14 text-center sm:px-6 sm:py-18">
-          <p className="mb-4 text-xs font-medium uppercase tracking-[0.28em] text-primary/70">The Collection</p>
-          <h1 className="font-serif text-4xl font-bold tracking-tight">Lab-grown jewelry essentials</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-muted-foreground">
+        <div className="container mx-auto px-4 py-9 text-left sm:px-6 sm:py-18 sm:text-center">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.28em] text-primary/70 sm:mb-4">The Collection</p>
+          <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">Lab-grown jewelry essentials</h1>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:mt-4">
             Shop by jewelry type or by stone: everyday 925 silver pieces, lab-grown diamonds, and colored gemstones.
           </p>
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground sm:mt-4">
             {products.length} {products.length === 1 ? "piece" : "pieces"}
           </p>
         </div>
       </section>
 
-      <section className="bg-background py-7">
+      <section className="sticky top-16 z-30 border-b bg-background/95 py-3 backdrop-blur sm:static sm:border-b-0 sm:py-7">
         <div className="container mx-auto flex gap-2 overflow-x-auto px-4 sm:px-6">
           {filters.map((item) => {
             const active = activeFilter === item.match;
@@ -85,14 +85,14 @@ export default async function ProductsPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <section className="bg-background pb-16 sm:pb-20">
+      <section className="bg-background pb-16 pt-5 sm:pb-20 sm:pt-0">
         <div className="container mx-auto px-4 sm:px-6">
           {products.length === 0 ? (
             <div className="py-28 text-center">
               <p className="text-lg text-muted-foreground">No pieces found.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
               {products.map((product) => {
                 const imgs = parseImages(product.images);
                 const firstImg = imgs[0];
@@ -108,17 +108,17 @@ export default async function ProductsPage({ searchParams }: Props) {
                           />
                         )}
                       </div>
-                      <CardContent className="p-5">
-                        <div className="mb-3 flex items-center justify-between gap-3">
-                          <Badge variant="secondary" className="rounded-sm bg-white text-xs text-foreground">
+                      <CardContent className="p-3 sm:p-5">
+                        <div className="mb-2 flex items-center justify-between gap-2 sm:mb-3">
+                          <Badge variant="secondary" className="max-w-full truncate rounded-sm bg-white px-1.5 text-[10px] text-foreground sm:px-2.5 sm:text-xs">
                             {product.category}
                           </Badge>
-                          <span className={`text-xs ${product.stock === 0 ? "text-destructive" : "text-muted-foreground"}`}>
+                          <span className={`hidden text-xs sm:inline ${product.stock === 0 ? "text-destructive" : "text-muted-foreground"}`}>
                             {product.stock === 0 ? "Sold out" : `${product.stock} in stock`}
                           </span>
                         </div>
-                        <h2 className="line-clamp-2 font-serif text-base font-semibold leading-tight">{product.name}</h2>
-                        <p className="mt-3 text-lg font-semibold">${product.price.toFixed(2)}</p>
+                        <h2 className="line-clamp-2 font-serif text-sm font-semibold leading-tight sm:text-base">{product.name}</h2>
+                        <p className="mt-2 text-base font-semibold sm:mt-3 sm:text-lg">${product.price.toFixed(2)}</p>
                       </CardContent>
                     </Card>
                   </Link>

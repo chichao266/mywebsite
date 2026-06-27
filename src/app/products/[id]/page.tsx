@@ -108,9 +108,9 @@ export default function ProductDetailPage({
   ].filter(([, value]) => value);
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div className="container mx-auto px-4 pb-28 pt-8 sm:px-6 sm:py-16">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8 font-sans">
+      <nav className="mb-5 flex items-center gap-2 text-sm text-muted-foreground font-sans sm:mb-8">
         <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
         <span>/</span>
         <Link href="/products" className="hover:text-foreground transition-colors">Collection</Link>
@@ -118,11 +118,11 @@ export default function ProductDetailPage({
         <span className="text-foreground">{product.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+      <div className="grid grid-cols-1 gap-7 lg:grid-cols-2 lg:gap-16">
         {/* ── Image Gallery ── */}
         <div>
           {/* Main Image */}
-          <div className="relative aspect-square overflow-hidden rounded-xl bg-secondary/20 border border-border/40">
+          <div className="relative aspect-square overflow-hidden rounded-md border border-border/40 bg-secondary/20 sm:rounded-xl">
             {images[mainIndex] ? (
               <img src={images[mainIndex]} alt={product.name} className="h-full w-full object-cover" />
             ) : (
@@ -137,12 +137,12 @@ export default function ProductDetailPage({
 
           {/* Thumbnails */}
           {images.length > 1 && (
-            <div className="flex gap-3 mt-4">
+            <div className="mt-3 flex gap-2 overflow-x-auto sm:mt-4 sm:gap-3">
               {images.map((url, i) => (
                 <button
                   key={i}
                   onClick={() => setMainIndex(i)}
-                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-all sm:h-20 sm:w-20 sm:rounded-lg ${
                     i === mainIndex ? "border-primary ring-2 ring-primary/20" : "border-border/40 hover:border-primary/40"
                   }`}
                 >
@@ -156,10 +156,10 @@ export default function ProductDetailPage({
         {/* ── Info ── */}
         <div className="flex flex-col justify-center">
           <Badge variant="secondary" className="mb-3 w-fit rounded-sm bg-muted text-foreground">{product.category}</Badge>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight leading-tight">{product.name}</h1>
-          <p className="mt-4 text-3xl font-bold text-foreground font-sans">${product.price.toFixed(2)}</p>
+          <h1 className="font-serif text-2xl font-bold leading-tight tracking-tight sm:text-4xl">{product.name}</h1>
+          <p className="mt-3 font-sans text-2xl font-bold text-foreground sm:mt-4 sm:text-3xl">${product.price.toFixed(2)}</p>
 
-          <div className="mt-6 border-t border-border/40 pt-6">
+          <div className="mt-5 border-t border-border/40 pt-5 sm:mt-6 sm:pt-6">
             <p className="text-muted-foreground leading-relaxed whitespace-pre-line font-sans">{product.description}</p>
           </div>
 
@@ -181,7 +181,7 @@ export default function ProductDetailPage({
           </div>
 
           {/* Add to Cart */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
+          <div className="mt-8 hidden flex-col gap-4 sm:flex sm:flex-row">
             <AddToCartButton product={{ id: product.id, name: product.name, price: product.price, imageUrl: images[0] || "", stock: product.stock }} />
             <Button variant="outline" size="lg" asChild className="font-sans"><Link href="/products">← Back to Collection</Link></Button>
           </div>
@@ -213,6 +213,17 @@ export default function ProductDetailPage({
           <p className="mt-6 text-xs leading-5 text-muted-foreground">
             Lab-grown gemstones are disclosed clearly. Product images and stone color may vary slightly by screen and batch.
           </p>
+        </div>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-white/95 px-4 py-3 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] backdrop-blur sm:hidden">
+        <div className="flex items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs text-muted-foreground">{product.name}</p>
+            <p className="text-lg font-bold">${product.price.toFixed(2)}</p>
+          </div>
+          <div className="w-[9.5rem]">
+            <AddToCartButton product={{ id: product.id, name: product.name, price: product.price, imageUrl: images[0] || "", stock: product.stock }} />
+          </div>
         </div>
       </div>
     </div>

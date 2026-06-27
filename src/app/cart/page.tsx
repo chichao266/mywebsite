@@ -21,14 +21,14 @@ export default function CartPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div className="container mx-auto px-4 pb-28 pt-8 sm:px-6 sm:py-16">
       <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight mb-2">Your Cart</h1>
-      <p className="text-muted-foreground mb-10 font-sans">{totalItems} {totalItems === 1 ? "item" : "items"}</p>
+      <p className="mb-6 font-sans text-muted-foreground sm:mb-10">{totalItems} {totalItems === 1 ? "item" : "items"}</p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
-            <Card key={item.id} className="flex gap-4 p-4 border-border/60">
+            <Card key={item.id} className="flex gap-3 border-border/60 p-3 sm:gap-4 sm:p-4">
               <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-secondary/30 flex-shrink-0">
                 {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />}
               </div>
@@ -37,14 +37,14 @@ export default function CartPage() {
                 <p className="mt-1 text-lg font-bold">${item.price.toFixed(2)}</p>
                 <div className="mt-3 flex items-center gap-3">
                   <div className="flex items-center border border-border/60 rounded-md">
-                    <button onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))} className="px-2.5 py-1 text-sm hover:bg-secondary transition-colors">−</button>
+                    <button onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))} className="px-3 py-1.5 text-sm hover:bg-secondary transition-colors sm:px-2.5 sm:py-1">−</button>
                     <span className="px-3 py-1 text-sm font-medium min-w-[2.5rem] text-center">{item.quantity}</span>
-                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-2.5 py-1 text-sm hover:bg-secondary transition-colors">+</button>
+                    <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-3 py-1.5 text-sm hover:bg-secondary transition-colors sm:px-2.5 sm:py-1">+</button>
                   </div>
                   <button onClick={() => removeItem(item.id)} className="text-xs text-muted-foreground hover:text-destructive transition-colors">Remove</button>
                 </div>
               </div>
-              <div className="text-right flex-shrink-0">
+              <div className="hidden text-right flex-shrink-0 sm:block">
                 <p className="text-sm text-muted-foreground">Subtotal</p>
                 <p className="font-bold">${(item.price * item.quantity).toFixed(2)}</p>
               </div>
@@ -65,6 +65,16 @@ export default function CartPage() {
             <p className="mt-4 text-xs text-center text-muted-foreground font-sans">Free worldwide shipping on orders over $150</p>
           </Card>
         </div>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-white/95 px-4 py-3 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] backdrop-blur lg:hidden">
+        <div className="flex items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs text-muted-foreground">{totalItems} {totalItems === 1 ? "item" : "items"}</p>
+            <p className="text-lg font-bold">${totalPrice.toFixed(2)}</p>
+          </div>
+          <Button size="lg" className="w-[10rem]" asChild><Link href="/checkout">Checkout</Link></Button>
+        </div>
+        <p className="mt-2 text-center text-xs text-muted-foreground">Free worldwide shipping over $150</p>
       </div>
     </div>
   );
