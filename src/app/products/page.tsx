@@ -24,8 +24,6 @@ const filters = [
   { label: "Necklaces", href: "/products?type=Necklace", match: "type:Necklace" },
   { label: "Earrings", href: "/products?type=Earrings", match: "type:Earrings" },
   { label: "Bracelets", href: "/products?type=Bracelet", match: "type:Bracelet" },
-  { label: "Diamonds", href: "/products?stone=Diamond", match: "stone:Diamond" },
-  { label: "Color", href: "/products?stone=Color", match: "stone:Color" },
 ];
 
 export default async function ProductsPage({ searchParams }: Props) {
@@ -58,7 +56,7 @@ export default async function ProductsPage({ searchParams }: Props) {
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.28em] text-primary/70 sm:mb-4">The Collection</p>
           <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">Lab-grown jewelry essentials</h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:mt-4">
-            Shop by jewelry type or by stone: everyday 925 silver pieces, lab-grown diamonds, and colored gemstones.
+            Shop new arrivals and everyday jewelry by piece type.
           </p>
           <p className="mt-3 text-sm text-muted-foreground sm:mt-4">
             {products.length} {products.length === 1 ? "piece" : "pieces"}

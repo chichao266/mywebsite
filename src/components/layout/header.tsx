@@ -14,8 +14,6 @@ const navLinks = [
   { href: "/products?type=Necklace", label: "Necklaces" },
   { href: "/products?type=Earrings", label: "Earrings" },
   { href: "/products?type=Bracelet", label: "Bracelets" },
-  { href: "/products?stone=Diamond", label: "Diamonds" },
-  { href: "/products?stone=Color", label: "Color" },
   { href: "/about", label: "About" },
 ];
 

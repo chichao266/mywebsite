@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getFeaturedProducts } from "@/lib/product-data";
+import { getFeaturedProducts, getProducts } from "@/lib/product-data";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +21,7 @@ function parseImages(images: string): string[] {
 
 export default async function HomePage() {
   const products = await getFeaturedProducts(8);
+  const newProducts = await getProducts({ newOnly: true });
 
   const values = [
     {
@@ -41,7 +42,7 @@ export default async function HomePage() {
     { name: "Rings", href: "/products?type=Ring", tone: "border-neutral-300" },
     { name: "Necklaces", href: "/products?type=Necklace", tone: "border-blue-300" },
     { name: "Earrings", href: "/products?type=Earrings", tone: "border-emerald-300" },
-    { name: "Color", href: "/products?stone=Color", tone: "border-rose-300" },
+    { name: "Bracelets", href: "/products?type=Bracelet", tone: "border-rose-300" },
   ];
 
   return (
@@ -86,6 +87,51 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {newProducts.length > 0 && (
+        <section className="bg-white py-12 sm:py-16">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.25em] text-primary/70">Fresh arrivals</p>
+                <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight">New In</h2>
+              </div>
+              <Link href="/products?collection=new" className="text-sm font-medium text-foreground hover:text-primary">
+                View all
+              </Link>
+            </div>
+            <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-6">
+              {newProducts.slice(0, 4).map((product) => {
+                const images = parseImages(product.images);
+                const firstImg = images[0];
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/products/${product.id}`}
+                    className="group w-[42vw] min-w-[42vw] snap-start sm:w-auto sm:min-w-0"
+                  >
+                    <div className="aspect-square overflow-hidden rounded-md bg-muted/30">
+                      {firstImg ? (
+                        <img
+                          src={firstImg}
+                          alt={product.name}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                    <h3 className="mt-3 line-clamp-2 font-serif text-sm font-semibold leading-tight sm:text-base">{product.name}</h3>
+                    <p className="mt-1 text-sm font-semibold sm:text-base">${product.price.toFixed(2)}</p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="bg-background py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6">

@@ -68,9 +68,11 @@ export async function getProducts(filters: ProductFilters = {}) {
     return await prisma.product.findMany({
       where: whereParts.length > 0 ? { AND: whereParts } : undefined,
       orderBy: { createdAt: "desc" },
+      take: filters.newOnly ? 24 : undefined,
     });
   } catch {
-    return fallbackProducts().filter((product) => matchesFilters(product, filters));
+    const products = fallbackProducts().filter((product) => matchesFilters(product, filters));
+    return filters.newOnly ? products.slice(0, 24) : products;
   }
 }
 
