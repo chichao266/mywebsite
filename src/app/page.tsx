@@ -69,7 +69,11 @@ export default async function HomePage() {
               Wear color like a signature.
             </h1>
             <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row">
-              <Button asChild size="lg" className="bg-white px-8 text-stone-950 hover:bg-white/90">
+              <Button
+                asChild
+                size="lg"
+                className="w-full max-w-[18rem] border border-white/45 bg-white/12 px-8 text-white shadow-none backdrop-blur-md hover:bg-white/20 sm:w-auto"
+              >
                 <Link href="/products">Shop the Collection</Link>
               </Button>
             </div>
