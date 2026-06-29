@@ -1,11 +1,13 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/admin-auth";
 import { isProductionDeployment } from "@/lib/admin-dev-fallbacks";
 import { demoProducts } from "@/lib/demo-products";
 
 export async function getStats() {
   try {
+    await requireAdmin();
     const [
       totalProducts,
       totalOrders,

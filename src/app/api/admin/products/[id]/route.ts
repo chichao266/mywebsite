@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { AdminAuthError, requireAdminRequest } from "@/lib/admin-auth";
 import { rethrowInProduction } from "@/lib/admin-dev-fallbacks";
 import { prisma } from "@/lib/prisma";
 
@@ -6,14 +7,22 @@ function clean(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }
 
+function unauthorized(error: unknown) {
+  if (error instanceof AdminAuthError) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  return null;
+}
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const body = await req.json();
-  const images = Array.isArray(body.images) ? JSON.stringify(body.images) : body.images;
   try {
+    await requireAdminRequest(req);
+    const body = await req.json();
+    const images = Array.isArray(body.images) ? JSON.stringify(body.images) : body.images;
     const product = await prisma.product.update({
       where: { id },
       data: {
@@ -38,6 +47,8 @@ export async function PUT(
     });
     return NextResponse.json(product);
   } catch (error) {
+    const response = unauthorized(error);
+    if (response) return response;
     rethrowInProduction(error);
     return NextResponse.json(
       { error: "Local preview database is unavailable." },
@@ -47,14 +58,17 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   try {
+    await requireAdminRequest(req);
     await prisma.product.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {
+    const response = unauthorized(error);
+    if (response) return response;
     rethrowInProduction(error);
     return NextResponse.json(
       { error: "Local preview database is unavailable." },

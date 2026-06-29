@@ -2,28 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/password";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
-import { getOptionalSecret, getRequiredSecret } from "@/lib/env";
-async function createToken(payload: string): Promise<string> {
-  const secret = getRequiredSecret("ADMIN_SECRET");
-  const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    "raw",
-    encoder.encode(secret),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"]
-  );
-  const sig = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
-  const sigHex = Array.from(new Uint8Array(sig))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  return `${payload}:${sigHex}`;
-}
+import { getOptionalSecret } from "@/lib/env";
+import { createAdminToken } from "@/lib/admin-token";
 
 async function createAdminResponse(user: { id: string; email: string }) {
-  const token = await createToken(
-    JSON.stringify({ userId: user.id, email: user.email })
-  );
+  const token = await createAdminToken(user);
 
   const response = NextResponse.json({ success: true });
   response.cookies.set("admin_token", token, {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { AdminAuthError, requireAdminRequest } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
 import { demoSiteSettings, rethrowInProduction } from "@/lib/admin-dev-fallbacks";
 
@@ -29,9 +30,17 @@ const DEFAULTS: Record<string, { title: string; content: string }> = {
   },
 };
 
+function unauthorized(error: unknown) {
+  if (error instanceof AdminAuthError) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  return null;
+}
+
 // GET — return all settings (create defaults if missing)
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    await requireAdminRequest(req);
     const existing = await prisma.siteSetting.findMany();
     const existingKeys = new Set(existing.map((s) => s.key));
 
@@ -49,6 +58,8 @@ export async function GET() {
     });
     return NextResponse.json(settings);
   } catch (error) {
+    const response = unauthorized(error);
+    if (response) return response;
     rethrowInProduction(error);
     return NextResponse.json(demoSiteSettings);
   }
@@ -56,16 +67,19 @@ export async function GET() {
 
 // PUT — update a setting
 export async function PUT(req: NextRequest) {
-  const body = await req.json();
-  const { key, title, content } = body;
   try {
+    await requireAdminRequest(req);
+    const body = await req.json();
+    const { key, title, content } = body;
     const setting = await prisma.siteSetting.update({
       where: { key },
       data: { title, content },
     });
     return NextResponse.json(setting);
   } catch (error) {
+    const response = unauthorized(error);
+    if (response) return response;
     rethrowInProduction(error);
-    return NextResponse.json({ key, title, content });
+    return NextResponse.json({ error: "Local preview database is unavailable." }, { status: 503 });
   }
 }

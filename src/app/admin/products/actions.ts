@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/admin-auth";
 import { rethrowInProduction } from "@/lib/admin-dev-fallbacks";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -27,6 +28,7 @@ export type ProductFormData = {
 
 export async function createProduct(data: ProductFormData) {
   try {
+    await requireAdmin();
     await prisma.product.create({ data });
   } catch (error) {
     rethrowInProduction(error);
@@ -37,6 +39,7 @@ export async function createProduct(data: ProductFormData) {
 
 export async function updateProduct(id: string, data: ProductFormData) {
   try {
+    await requireAdmin();
     await prisma.product.update({ where: { id }, data });
   } catch (error) {
     rethrowInProduction(error);
@@ -48,6 +51,7 @@ export async function updateProduct(id: string, data: ProductFormData) {
 
 export async function deleteProduct(id: string) {
   try {
+    await requireAdmin();
     await prisma.product.delete({ where: { id } });
   } catch (error) {
     rethrowInProduction(error);
