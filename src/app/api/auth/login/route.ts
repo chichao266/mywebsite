@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { createHmac, randomBytes } from "crypto";
 import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/password";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { getRequiredSecret } from "@/lib/env";
-
-function createToken(userId: string): string {
-  const payload = `${userId}:${Date.now()}:${randomBytes(8).toString("hex")}`;
-  const signature = createHmac("sha256", getRequiredSecret("AUTH_SECRET")).update(payload).digest("hex");
-  return `${payload}:${signature}`;
-}
+import { createUserToken } from "@/lib/user-token";
 
 export async function POST(req: NextRequest) {
   try {
@@ -46,7 +40,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const token = createToken(user.id);
+    const token = await createUserToken(user);
     const response = NextResponse.json({
       success: true,
       user: { id: user.id, email: user.email, name: user.name },
@@ -61,7 +55,7 @@ export async function POST(req: NextRequest) {
     });
 
     return response;
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Login failed" }, { status: 500 });
   }
 }

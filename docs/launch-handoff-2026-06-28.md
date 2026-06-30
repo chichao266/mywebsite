@@ -510,6 +510,63 @@ Verification:
 - Manual validation checks passed for valid products, missing names, negative prices, negative stock, invalid categories, and unsafe image URLs.
 - `npm run build` passed.
 
+## Security Review Fifth Hardening Pass
+
+Date: 2026-06-30
+
+Status: implemented locally, not yet committed or pushed.
+
+Focus:
+
+- add server-side expiry and stronger verification for normal user auth tokens
+- remove duplicated user token signing and verification code
+- keep user profile responses minimal
+
+Files changed:
+
+- `src/lib/user-token.ts`
+- `src/lib/user-auth.ts`
+- `src/app/api/auth/login/route.ts`
+- `src/app/api/auth/register/route.ts`
+- `src/app/api/auth/me/route.ts`
+- `src/app/api/auth/settings/route.ts`
+
+Main changes:
+
+- Added signed JSON user tokens with:
+  - `userId`
+  - `email`
+  - `role`
+  - `iat`
+  - `exp`
+- User token TTL is 7 days.
+- Token verification now checks:
+  - HMAC signature
+  - expiry timestamp
+  - payload shape
+  - user still exists
+  - user email still matches
+  - user role still matches
+- Login and registration now use shared `createUserToken`.
+- `/api/auth/me` and `/api/auth/settings` now use shared `requireUserRequest`.
+- `/api/auth/me` only returns public user fields:
+  - `id`
+  - `email`
+  - `name`
+
+Expected side effect:
+
+- Existing normal user login cookies will be invalid after deployment because the token format changed. Users can log in again.
+
+Verification:
+
+- Manual token checks passed:
+  - valid token verifies
+  - tampered token fails
+  - expired token fails
+- `npm run build` passed.
+- `npm run lint` passed with existing warnings only.
+
 ## Handoff Notes For Next Person
 
 - The user wants discussion before design-heavy changes.
