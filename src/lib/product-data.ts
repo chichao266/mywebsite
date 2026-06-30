@@ -16,6 +16,7 @@ export type ProductFilters = {
   productType?: string;
   stoneGroup?: "Diamond" | "Color";
   newOnly?: boolean;
+  search?: string;
 };
 
 export type ProductPageOptions = {
@@ -37,7 +38,17 @@ export async function getFeaturedProducts(take = 8) {
   }
 }
 
-function matchesFilters(product: { category: string; productType?: string | null; name: string }, filters: ProductFilters) {
+function matchesFilters(product: { category: string; productType?: string | null; name: string; description?: string | null }, filters: ProductFilters) {
+  if (filters.search) {
+    const query = filters.search.toLowerCase();
+    const fields = [
+      product.name,
+      product.description || "",
+      product.category,
+      product.productType || "",
+    ];
+    if (!fields.some((field) => field.toLowerCase().includes(query))) return false;
+  }
   if (filters.category && product.category !== filters.category) return false;
   if (filters.productType) {
     const productType = product.productType || "";
@@ -67,6 +78,16 @@ function getProductWhereParts(filters: ProductFilters) {
   }
   if (filters.stoneGroup === "Color") {
     whereParts.push({ category: { in: ["Lab Sapphires", "Lab Emeralds", "Lab Rubies", "Other Gemstones"] } });
+  }
+  if (filters.search) {
+    whereParts.push({
+      OR: [
+        { name: { contains: filters.search, mode: "insensitive" as const } },
+        { description: { contains: filters.search, mode: "insensitive" as const } },
+        { category: { contains: filters.search, mode: "insensitive" as const } },
+        { productType: { contains: filters.search, mode: "insensitive" as const } },
+      ],
+    });
   }
 
   return whereParts.length > 0 ? { AND: whereParts } : undefined;

@@ -16,7 +16,7 @@ function parseImages(images: string): string[] {
 }
 
 interface Props {
-  searchParams: Promise<{ category?: string; type?: string; stone?: string; collection?: string; page?: string }>;
+  searchParams: Promise<{ category?: string; type?: string; stone?: string; collection?: string; page?: string; search?: string }>;
 }
 
 const PRODUCTS_PER_PAGE = 12;
@@ -31,10 +31,11 @@ const filters = [
 ];
 
 export default async function ProductsPage({ searchParams }: Props) {
-  const { category, type, stone, collection, page } = await searchParams;
+  const { category, type, stone, collection, page, search } = await searchParams;
   const selectedCategory = category && category !== "All" ? category : undefined;
   const selectedStone = stone === "Diamond" || stone === "Color" ? stone : undefined;
   const selectedType = type || undefined;
+  const searchQuery = search?.trim() || undefined;
   const requestedPage = Number.parseInt(page || "1", 10);
   const activeFilter =
     collection === "new"
@@ -53,6 +54,7 @@ export default async function ProductsPage({ searchParams }: Props) {
       productType: selectedType,
       stoneGroup: selectedStone,
       newOnly: collection === "new",
+      search: searchQuery,
     },
     {
       page: Number.isFinite(requestedPage) ? requestedPage : 1,
@@ -67,6 +69,7 @@ export default async function ProductsPage({ searchParams }: Props) {
     if (selectedType) params.set("type", selectedType);
     if (selectedStone) params.set("stone", selectedStone);
     if (collection === "new") params.set("collection", "new");
+    if (searchQuery) params.set("search", searchQuery);
     if (nextPage > 1) params.set("page", String(nextPage));
     const query = params.toString();
     return query ? `/products?${query}` : "/products";
@@ -77,9 +80,11 @@ export default async function ProductsPage({ searchParams }: Props) {
       <section className="border-b bg-white">
         <div className="container mx-auto px-4 py-9 text-left sm:px-6 sm:py-18 sm:text-center">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.28em] text-primary/70 sm:mb-4">The Collection</p>
-          <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">Lab-grown jewelry essentials</h1>
+          <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+            {searchQuery ? `Search results for "${searchQuery}"` : "Lab-grown jewelry essentials"}
+          </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:mt-4">
-            Shop new arrivals and everyday jewelry by piece type.
+            {searchQuery ? "Browse matching jewelry from the collection." : "Shop new arrivals and everyday jewelry by piece type."}
           </p>
           <p className="mt-3 text-sm text-muted-foreground sm:mt-4">
             {totalCount} {totalCount === 1 ? "piece" : "pieces"}
