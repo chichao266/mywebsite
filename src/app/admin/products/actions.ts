@@ -3,34 +3,16 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-auth";
 import { rethrowInProduction } from "@/lib/admin-dev-fallbacks";
+import { ProductValidationError, validateProductInput, type ProductFormData } from "@/lib/product-validation";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
-export type ProductFormData = {
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  productType?: string;
-  stoneType?: string;
-  metal?: string;
-  caratWeight?: string;
-  cut?: string;
-  color?: string;
-  clarity?: string;
-  certification?: string;
-  dimensions?: string;
-  care?: string;
-  stock: number;
-  featured: boolean;
-  images: string;
-};
 
 export async function createProduct(data: ProductFormData) {
   try {
     await requireAdmin();
-    await prisma.product.create({ data });
+    await prisma.product.create({ data: validateProductInput(data) });
   } catch (error) {
+    if (error instanceof ProductValidationError) throw error;
     rethrowInProduction(error);
   }
   revalidatePath("/admin/products");
@@ -40,8 +22,9 @@ export async function createProduct(data: ProductFormData) {
 export async function updateProduct(id: string, data: ProductFormData) {
   try {
     await requireAdmin();
-    await prisma.product.update({ where: { id }, data });
+    await prisma.product.update({ where: { id }, data: validateProductInput(data) });
   } catch (error) {
+    if (error instanceof ProductValidationError) throw error;
     rethrowInProduction(error);
   }
   revalidatePath("/admin/products");

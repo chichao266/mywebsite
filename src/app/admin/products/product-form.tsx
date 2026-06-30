@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createProduct, updateProduct, type ProductFormData } from "./actions";
+import { type ProductFormData } from "@/lib/product-validation";
+import { createProduct, updateProduct } from "./actions";
 
 const maxImages = 5;
 
@@ -106,10 +107,15 @@ export default function ProductForm({
     e.preventDefault();
     setError("");
     setSaving(true);
-    if (isEdit) {
-      await updateProduct(productId!, data);
-    } else {
-      await createProduct(data);
+    try {
+      if (isEdit) {
+        await updateProduct(productId!, data);
+      } else {
+        await createProduct(data);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "保存商品失败");
+      setSaving(false);
     }
   }
 

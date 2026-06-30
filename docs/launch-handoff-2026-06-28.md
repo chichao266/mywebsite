@@ -460,6 +460,56 @@ Verification:
 - `npm run lint` passed with existing warnings only.
 - `npm audit --omit=dev` reports remaining Next/PostCSS moderate advisories where the suggested fix path is not appropriate because it attempts a breaking Next version change.
 
+## Security Review Fourth Hardening Pass
+
+Date: 2026-06-30
+
+Status: implemented locally, not yet committed or pushed.
+
+Focus:
+
+- validate product/admin input before database writes
+- avoid invalid price, stock, category, product type, image data, and oversized text
+- keep validation logic shared between API routes and Server Actions
+
+Files changed:
+
+- `src/lib/product-validation.ts`
+- `src/app/api/admin/products/route.ts`
+- `src/app/api/admin/products/[id]/route.ts`
+- `src/app/admin/products/actions.ts`
+- `src/app/admin/products/product-form.tsx`
+
+Main changes:
+
+- Added shared `validateProductInput`.
+- Product name is required and trimmed.
+- Product description is trimmed and length-limited, but not required.
+- Price must be a finite non-negative number and is rounded to cents.
+- Stock must be a non-negative integer.
+- Product category must be one of:
+  - `Lab Diamonds`
+  - `Lab Sapphires`
+  - `Lab Emeralds`
+  - `Lab Rubies`
+  - `Other Gemstones`
+- Product type must be one of:
+  - `Ring`
+  - `Necklace`
+  - `Earrings`
+  - `Bracelet`
+- Optional spec fields are trimmed and length-limited.
+- Product images are normalized to a maximum of 5 safe HTTP/HTTPS URLs.
+- Invalid image URLs are dropped rather than stored.
+- Admin product API create/update routes return `400` for validation errors.
+- Admin product Server Actions also validate before writing.
+- Product form now catches save errors and shows the message instead of staying in a saving state.
+
+Verification:
+
+- Manual validation checks passed for valid products, missing names, negative prices, negative stock, invalid categories, and unsafe image URLs.
+- `npm run build` passed.
+
 ## Handoff Notes For Next Person
 
 - The user wants discussion before design-heavy changes.
