@@ -170,6 +170,11 @@ const products = await getFeaturedProducts(4);
 
 ## Recent Git Commits
 
+- `458e2cd` - fix: use shared rate limiting
+- `cb5c83d` - fix: harden user auth tokens
+- `d50c6c0` - fix: validate admin product input
+- `9d88fe9` - fix: harden admin content sanitization
+- `97f985a` - fix: harden checkout order flow
 - `ddc8443` - fix: harden admin authorization
 - `22ad6f2` - style: refine homepage hero cta
 - `ed3340e` - feat: simplify storefront navigation
@@ -342,7 +347,7 @@ Recommended next security pass:
 
 Date: 2026-06-30
 
-Status: implemented locally, not yet committed or pushed.
+Status: committed and pushed.
 
 Focus:
 
@@ -396,7 +401,7 @@ Production follow-up completed:
 
 Date: 2026-06-30
 
-Status: implemented locally, not yet committed or pushed.
+Status: committed and pushed.
 
 Focus:
 
@@ -464,7 +469,7 @@ Verification:
 
 Date: 2026-06-30
 
-Status: implemented locally, not yet committed or pushed.
+Status: committed and pushed.
 
 Focus:
 
@@ -514,7 +519,7 @@ Verification:
 
 Date: 2026-06-30
 
-Status: implemented locally, not yet committed or pushed.
+Status: committed and pushed.
 
 Focus:
 
@@ -571,7 +576,7 @@ Verification:
 
 Date: 2026-06-30
 
-Status: implemented locally, not yet committed or pushed.
+Status: committed and pushed.
 
 Focus:
 
@@ -608,9 +613,9 @@ Verification:
 - `npm run build` passed.
 - `npm run lint` passed with existing warnings only.
 
-Production database follow-up needed:
+Production database follow-up completed:
 
-The new shared limiter needs a small table in production. Create it in Neon Query:
+The new shared limiter needs a small table in production. The user created it in Vercel Neon Query:
 
 ```sql
 CREATE TABLE IF NOT EXISTS "RateLimitBucket" (
@@ -621,7 +626,51 @@ CREATE TABLE IF NOT EXISTS "RateLimitBucket" (
 );
 ```
 
-The app can still run before this table exists because it falls back to in-memory limiting, but production-grade shared limiting starts only after the table exists.
+The app can still run if this table is temporarily unavailable because it falls back to in-memory limiting. With the table now created, production-grade shared limiting is active for the covered endpoints.
+
+## Current Session Progress Snapshot
+
+Date: 2026-06-30
+
+Final pushed commit:
+
+```text
+458e2cd fix: use shared rate limiting
+```
+
+Repository state:
+
+- Local working tree was clean after the last push.
+- All six high-priority adversarial review hardening passes have been implemented and pushed.
+- Production database follow-ups completed:
+  - `Order.checkoutKey` column added.
+  - `Order_checkoutKey_key` unique index added.
+  - `RateLimitBucket` table created.
+- User verified checkout/order/stock behavior after the checkout hardening pass.
+
+Completed high-priority security items:
+
+- Admin authorization defense-in-depth.
+- Admin token expiry and role validation.
+- Product upload magic-byte validation.
+- Checkout idempotency and transactional stock reservation.
+- Order cancellation stock release and cancelled-order reopen stock checks.
+- HTML sanitizer replacement with a whitelist sanitizer.
+- Admin-managed content sanitized before storage and before rendering.
+- Product/admin input validation.
+- Normal user token expiry and database-backed user revalidation.
+- Shared production rate limiting for auth, checkout, admin login, and support routes.
+
+Recommended next work:
+
+- Performance/UX pass:
+  - product listing pagination
+  - admin order pagination
+  - gradual replacement of key product/hero `<img>` usage with `next/image`
+  - cleanup of existing lint warnings
+- Optional merchandising pass:
+  - decide whether homepage `Featured Pieces` should cap at 4 instead of 8
+  - decide whether `New In` needs a manual admin toggle later
 
 ## Handoff Notes For Next Person
 
