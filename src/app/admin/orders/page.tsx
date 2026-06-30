@@ -5,6 +5,7 @@ import { updateOrderStatus } from "./actions";
 import StatusSelect from "./status-select";
 
 export const dynamic = "force-dynamic";
+const ORDERS_PER_PAGE = 20;
 
 const STATUS_LABELS: Record<string, string> = {
   pending_payment: "等待付款",
@@ -15,12 +16,18 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "已取消",
 };
 
-async function getOrders(where: { status?: string }) {
+async function getOrders(where: { status?: string }, page: number) {
   return prisma.order.findMany({
     where,
     orderBy: { createdAt: "desc" },
+    skip: (page - 1) * ORDERS_PER_PAGE,
+    take: ORDERS_PER_PAGE,
     include: { items: { include: { product: true } } },
   });
+}
+
+async function getOrderTotal(where: { status?: string }) {
+  return prisma.order.count({ where });
 }
 
 async function getOrderCounts() {
@@ -33,21 +40,37 @@ async function getOrderCounts() {
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }) {
-  const { status: filterStatus } = await searchParams;
+  const { status: filterStatus, page } = await searchParams;
+  const requestedPage = Number.parseInt(page || "1", 10);
+  const currentPage = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
 
   const where = filterStatus ? { status: filterStatus } : {};
   let orders: Awaited<ReturnType<typeof getOrders>> = [];
   let orderCounts: Awaited<ReturnType<typeof getOrderCounts>> = [];
+  let totalOrders = 0;
+  let totalPages = 1;
+  let activePage = currentPage;
 
   try {
-    [orders, orderCounts] = await Promise.all([
-      getOrders(where),
+    [orderCounts, totalOrders] = await Promise.all([
       getOrderCounts(),
+      getOrderTotal(where),
     ]);
+    totalPages = Math.max(1, Math.ceil(totalOrders / ORDERS_PER_PAGE));
+    activePage = Math.min(currentPage, totalPages);
+    orders = await getOrders(where, activePage);
   } catch (error) {
     rethrowInProduction(error);
+  }
+
+  function pageHref(nextPage: number) {
+    const params = new URLSearchParams();
+    if (filterStatus) params.set("status", filterStatus);
+    if (nextPage > 1) params.set("page", String(nextPage));
+    const query = params.toString();
+    return query ? `/admin/orders?${query}` : "/admin/orders";
   }
 
   return (
@@ -82,6 +105,12 @@ export default async function AdminOrdersPage({
           </a>
         ))}
       </div>
+
+      {totalOrders > 0 && (
+        <p className="mb-4 text-xs text-stone-400">
+          第 {activePage} / {totalPages} 页，共 {totalOrders} 个订单
+        </p>
+      )}
 
       {orders.length === 0 ? (
         <div className="bg-white rounded-xl border border-stone-200 p-12 text-center">
@@ -153,6 +182,36 @@ export default async function AdminOrdersPage({
             </div>
           ))}
         </div>
+      )}
+
+      {totalPages > 1 && (
+        <nav className="mt-6 flex items-center justify-center gap-3" aria-label="订单分页">
+          <a
+            href={pageHref(Math.max(1, activePage - 1))}
+            aria-disabled={activePage <= 1}
+            className={`rounded-full border px-4 py-2 text-xs transition-colors ${
+              activePage <= 1
+                ? "pointer-events-none border-stone-200 text-stone-300"
+                : "border-stone-200 bg-white text-stone-700 hover:border-stone-400"
+            }`}
+          >
+            上一页
+          </a>
+          <span className="min-w-20 text-center text-xs text-stone-400">
+            {activePage} / {totalPages}
+          </span>
+          <a
+            href={pageHref(Math.min(totalPages, activePage + 1))}
+            aria-disabled={activePage >= totalPages}
+            className={`rounded-full border px-4 py-2 text-xs transition-colors ${
+              activePage >= totalPages
+                ? "pointer-events-none border-stone-200 text-stone-300"
+                : "border-stone-200 bg-white text-stone-700 hover:border-stone-400"
+            }`}
+          >
+            下一页
+          </a>
+        </nav>
       )}
     </div>
   );
