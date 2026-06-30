@@ -385,6 +385,81 @@ Important deployment note:
 
 - Because `Order.checkoutKey` was added to Prisma schema, the production database schema must be synced before or with deployment, for example via the existing database push workflow. If code is deployed before the database has this column, checkout can fail at runtime.
 
+Production follow-up completed:
+
+- The production Neon database was manually updated through Vercel Neon Query.
+- Added `Order.checkoutKey`.
+- Added unique index `Order_checkoutKey_key`.
+- User verified checkout, admin order display, stock decrement, and cancel-to-restock behavior on production.
+
+## Security Review Third Hardening Pass
+
+Date: 2026-06-30
+
+Status: implemented locally, not yet committed or pushed.
+
+Focus:
+
+- replace regex-based HTML sanitization
+- sanitize admin-managed content before storing
+- preserve safe editorial formatting for shipping, returns, privacy, terms, contact, and about pages
+
+Files changed:
+
+- `package.json`
+- `package-lock.json`
+- `src/lib/sanitize-html.ts`
+- `src/app/admin/content/actions.ts`
+- `src/app/admin/settings/actions.ts`
+- `src/app/api/admin/settings/route.ts`
+
+Main changes:
+
+- Added the maintained `sanitize-html` package and TypeScript types.
+- Replaced the previous regex sanitizer with an explicit whitelist sanitizer.
+- Allowed editorial tags:
+  - `p`
+  - `br`
+  - `strong`
+  - `em`
+  - `b`
+  - `i`
+  - `u`
+  - `h2`
+  - `h3`
+  - `h4`
+  - `ul`
+  - `ol`
+  - `li`
+  - `a`
+  - `blockquote`
+- Allowed link attributes only:
+  - `href`
+  - `title`
+  - `target`
+  - `rel`
+- Allowed URL schemes only:
+  - `http`
+  - `https`
+  - `mailto`
+- Automatically adds `rel="noopener noreferrer"` to links.
+- Admin content saves now sanitize HTML before writing to `SiteSetting`.
+- Public page rendering still sanitizes HTML before `dangerouslySetInnerHTML`, giving a second safety boundary.
+
+Manual sanitizer check:
+
+- Removed `<script>`.
+- Removed event handlers like `onclick`.
+- Removed unsafe `javascript:` links.
+- Removed unsupported tags like `img`.
+- Preserved normal headings, paragraphs, strong text, and safe HTTPS links.
+
+Verification:
+
+- `npm run build` passed.
+- `npm run lint` passed with existing warnings only.
+- `npm audit --omit=dev` reports remaining Next/PostCSS moderate advisories where the suggested fix path is not appropriate because it attempts a breaking Next version change.
+
 ## Handoff Notes For Next Person
 
 - The user wants discussion before design-heavy changes.

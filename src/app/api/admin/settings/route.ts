@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { AdminAuthError, requireAdminRequest } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
 import { demoSiteSettings, rethrowInProduction } from "@/lib/admin-dev-fallbacks";
+import { sanitizeHtml } from "@/lib/sanitize-html";
 
 const DEFAULTS: Record<string, { title: string; content: string }> = {
   shipping: {
@@ -73,7 +74,7 @@ export async function PUT(req: NextRequest) {
     const { key, title, content } = body;
     const setting = await prisma.siteSetting.update({
       where: { key },
-      data: { title, content },
+      data: { title, content: sanitizeHtml(String(content || "")) },
     });
     return NextResponse.json(setting);
   } catch (error) {
