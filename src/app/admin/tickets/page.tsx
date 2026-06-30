@@ -2,14 +2,29 @@ import { getTickets, updateTicketStatus } from "./actions";
 import TicketStatusSelect from "./ticket-status";
 
 export const dynamic = "force-dynamic";
+const TICKETS_PER_PAGE = 20;
 
 export default async function AdminTicketsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }) {
-  const { status: filterStatus } = await searchParams;
-  const tickets = await getTickets(filterStatus);
+  const { status: filterStatus, page } = await searchParams;
+  const requestedPage = Number.parseInt(page || "1", 10);
+  const ticketPage = await getTickets(
+    filterStatus,
+    Number.isFinite(requestedPage) ? requestedPage : 1,
+    TICKETS_PER_PAGE
+  );
+  const { tickets, totalCount, totalPages } = ticketPage;
+
+  function pageHref(nextPage: number) {
+    const params = new URLSearchParams();
+    if (filterStatus) params.set("status", filterStatus);
+    if (nextPage > 1) params.set("page", String(nextPage));
+    const query = params.toString();
+    return query ? `/admin/tickets?${query}` : "/admin/tickets";
+  }
 
   return (
     <div>
@@ -37,6 +52,12 @@ export default async function AdminTicketsPage({
           </a>
         ))}
       </div>
+
+      {totalCount > 0 && (
+        <p className="mb-4 text-xs text-stone-400">
+          第 {ticketPage.page} / {totalPages} 页，共 {totalCount} 个工单
+        </p>
+      )}
 
       {tickets.length === 0 ? (
         <div className="bg-white rounded-xl border border-stone-200 p-12 text-center">
@@ -75,6 +96,36 @@ export default async function AdminTicketsPage({
             </div>
           ))}
         </div>
+      )}
+
+      {totalPages > 1 && (
+        <nav className="mt-6 flex items-center justify-center gap-3" aria-label="工单分页">
+          <a
+            href={pageHref(Math.max(1, ticketPage.page - 1))}
+            aria-disabled={ticketPage.page <= 1}
+            className={`rounded-full border px-4 py-2 text-xs transition-colors ${
+              ticketPage.page <= 1
+                ? "pointer-events-none border-stone-200 text-stone-300"
+                : "border-stone-200 bg-white text-stone-700 hover:border-stone-400"
+            }`}
+          >
+            上一页
+          </a>
+          <span className="min-w-20 text-center text-xs text-stone-400">
+            {ticketPage.page} / {totalPages}
+          </span>
+          <a
+            href={pageHref(Math.min(totalPages, ticketPage.page + 1))}
+            aria-disabled={ticketPage.page >= totalPages}
+            className={`rounded-full border px-4 py-2 text-xs transition-colors ${
+              ticketPage.page >= totalPages
+                ? "pointer-events-none border-stone-200 text-stone-300"
+                : "border-stone-200 bg-white text-stone-700 hover:border-stone-400"
+            }`}
+          >
+            下一页
+          </a>
+        </nav>
       )}
     </div>
   );
