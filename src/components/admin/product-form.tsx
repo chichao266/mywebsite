@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -237,8 +238,14 @@ export function ProductForm({ initial, productId, isEdit }: Props) {
         <label className="block text-sm font-medium mb-2">Product Images ({form.images.length}/{maxImages})</label>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
           {form.images.map((url, i) => (
-            <div key={i} className="relative group">
-              <img src={url} alt="" className="w-full aspect-square rounded-lg object-cover border bg-secondary" />
+            <div key={i} className="relative group aspect-square overflow-hidden rounded-lg border bg-secondary">
+              <Image
+                src={url}
+                alt=""
+                fill
+                sizes="(min-width: 640px) 20vw, 33vw"
+                className="object-cover"
+              />
               <button type="button" onClick={() => removeImage(i)} className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-destructive text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow">✕</button>
               <label className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                 <span className="text-white text-xs font-medium">Replace</span>

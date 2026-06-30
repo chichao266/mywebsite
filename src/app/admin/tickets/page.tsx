@@ -3,20 +3,6 @@ import TicketStatusSelect from "./ticket-status";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_LABELS: Record<string, string> = {
-  open: "待处理",
-  in_progress: "处理中",
-  resolved: "已解决",
-  closed: "已关闭",
-};
-
-const STATUS_COLORS: Record<string, string> = {
-  open: "bg-red-100 text-red-700",
-  in_progress: "bg-yellow-100 text-yellow-700",
-  resolved: "bg-green-100 text-green-700",
-  closed: "bg-stone-100 text-stone-500",
-};
-
 export default async function AdminTicketsPage({
   searchParams,
 }: {

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 export default function SettingsPage() {
   const [user, setUser] = useState<{ id: string; email: string; name: string } | null>(null);

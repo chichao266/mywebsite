@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -48,15 +49,21 @@ export default async function HomePage() {
   return (
     <div>
       <section className="relative min-h-[100svh] overflow-hidden bg-stone-950 sm:min-h-[82vh]">
-        <img
+        <Image
           src={MOBILE_HERO_IMAGE}
           alt="Woman wearing blue gemstone earrings and a statement ring"
-          className="absolute inset-0 h-full w-full object-cover object-center sm:hidden"
+          fill
+          sizes="100vw"
+          priority
+          className="object-cover object-center sm:hidden"
         />
-        <img
+        <Image
           src={HERO_IMAGE}
           alt="Woman wearing blue gemstone earrings and a statement ring"
-          className="absolute inset-0 hidden h-full w-full object-cover object-center sm:block"
+          fill
+          sizes="100vw"
+          priority
+          className="hidden object-cover object-center sm:block"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/20 to-black/18 sm:bg-gradient-to-r sm:from-black/70 sm:via-black/35 sm:to-black/10" />
 
@@ -114,12 +121,14 @@ export default async function HomePage() {
                     href={`/products/${product.id}`}
                     className="group w-[42vw] min-w-[42vw] snap-start sm:w-auto sm:min-w-0"
                   >
-                    <div className="aspect-square overflow-hidden rounded-md bg-muted/30">
+                    <div className="relative aspect-square overflow-hidden rounded-md bg-muted/30">
                       {firstImg ? (
-                        <img
+                        <Image
                           src={firstImg}
                           alt={product.name}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          fill
+                          sizes="(min-width: 640px) 25vw, 42vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
@@ -182,12 +191,14 @@ export default async function HomePage() {
                 return (
                   <Link key={product.id} href={`/products/${product.id}`} className="group">
                     <Card className="h-full overflow-hidden rounded-md border-border/60 shadow-none transition-colors hover:border-foreground/30">
-                      <div className="aspect-square overflow-hidden bg-muted/30">
+                      <div className="relative aspect-square overflow-hidden bg-muted/30">
                         {firstImg ? (
-                          <img
+                          <Image
                             src={firstImg}
                             alt={product.name}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">

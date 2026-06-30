@@ -2,6 +2,7 @@
 
 import { useCart } from "@/lib/cart-context";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -29,8 +30,16 @@ export default function CartPage() {
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
             <Card key={item.id} className="flex gap-3 border-border/60 p-3 sm:gap-4 sm:p-4">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-secondary/30 flex-shrink-0">
-                {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />}
+              <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-secondary/30 flex-shrink-0">
+                {item.imageUrl && (
+                  <Image
+                    src={item.imageUrl}
+                    alt={item.name}
+                    fill
+                    sizes="96px"
+                    className="object-cover"
+                  />
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-serif font-bold text-sm leading-tight truncate">{item.name}</h3>

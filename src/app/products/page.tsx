@@ -1,7 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getProducts } from "@/lib/product-data";
+import { getProductPage } from "@/lib/product-data";
 
 export const dynamic = "force-dynamic";
 
@@ -14,8 +16,10 @@ function parseImages(images: string): string[] {
 }
 
 interface Props {
-  searchParams: Promise<{ category?: string; type?: string; stone?: string; collection?: string }>;
+  searchParams: Promise<{ category?: string; type?: string; stone?: string; collection?: string; page?: string }>;
 }
+
+const PRODUCTS_PER_PAGE = 12;
 
 const filters = [
   { label: "All", href: "/products", match: "all" },
@@ -27,10 +31,11 @@ const filters = [
 ];
 
 export default async function ProductsPage({ searchParams }: Props) {
-  const { category, type, stone, collection } = await searchParams;
+  const { category, type, stone, collection, page } = await searchParams;
   const selectedCategory = category && category !== "All" ? category : undefined;
   const selectedStone = stone === "Diamond" || stone === "Color" ? stone : undefined;
   const selectedType = type || undefined;
+  const requestedPage = Number.parseInt(page || "1", 10);
   const activeFilter =
     collection === "new"
       ? "new"
@@ -42,12 +47,30 @@ export default async function ProductsPage({ searchParams }: Props) {
             ? `category:${selectedCategory}`
             : "all";
 
-  const products = await getProducts({
-    category: selectedCategory,
-    productType: selectedType,
-    stoneGroup: selectedStone,
-    newOnly: collection === "new",
-  });
+  const productPage = await getProductPage(
+    {
+      category: selectedCategory,
+      productType: selectedType,
+      stoneGroup: selectedStone,
+      newOnly: collection === "new",
+    },
+    {
+      page: Number.isFinite(requestedPage) ? requestedPage : 1,
+      pageSize: PRODUCTS_PER_PAGE,
+    }
+  );
+  const { products, totalCount, totalPages } = productPage;
+
+  function pageHref(nextPage: number) {
+    const params = new URLSearchParams();
+    if (selectedCategory) params.set("category", selectedCategory);
+    if (selectedType) params.set("type", selectedType);
+    if (selectedStone) params.set("stone", selectedStone);
+    if (collection === "new") params.set("collection", "new");
+    if (nextPage > 1) params.set("page", String(nextPage));
+    const query = params.toString();
+    return query ? `/products?${query}` : "/products";
+  }
 
   return (
     <div>
@@ -59,7 +82,7 @@ export default async function ProductsPage({ searchParams }: Props) {
             Shop new arrivals and everyday jewelry by piece type.
           </p>
           <p className="mt-3 text-sm text-muted-foreground sm:mt-4">
-            {products.length} {products.length === 1 ? "piece" : "pieces"}
+            {totalCount} {totalCount === 1 ? "piece" : "pieces"}
           </p>
         </div>
       </section>
@@ -97,12 +120,14 @@ export default async function ProductsPage({ searchParams }: Props) {
                 return (
                   <Link key={product.id} href={`/products/${product.id}`}>
                     <Card className="group h-full overflow-hidden rounded-md border-border/60 shadow-none transition-colors hover:border-foreground/30">
-                      <div className="aspect-square overflow-hidden bg-muted/30">
+                      <div className="relative aspect-square overflow-hidden bg-muted/30">
                         {firstImg && (
-                          <img
+                          <Image
                             src={firstImg}
                             alt={product.name}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 50vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         )}
                       </div>
@@ -123,6 +148,38 @@ export default async function ProductsPage({ searchParams }: Props) {
                 );
               })}
             </div>
+          )}
+
+          {totalPages > 1 && (
+            <nav className="mt-10 flex items-center justify-center gap-3 sm:mt-12" aria-label="Product pages">
+              <Link
+                href={pageHref(Math.max(1, productPage.page - 1))}
+                aria-disabled={productPage.page === 1}
+                className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
+                  productPage.page === 1
+                    ? "pointer-events-none border-border text-muted-foreground/50"
+                    : "border-border bg-white text-foreground hover:border-foreground/40"
+                }`}
+              >
+                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+                <span className="sr-only">Previous page</span>
+              </Link>
+              <span className="min-w-28 text-center text-sm text-muted-foreground">
+                Page {productPage.page} of {totalPages}
+              </span>
+              <Link
+                href={pageHref(Math.min(totalPages, productPage.page + 1))}
+                aria-disabled={productPage.page === totalPages}
+                className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
+                  productPage.page === totalPages
+                    ? "pointer-events-none border-border text-muted-foreground/50"
+                    : "border-border bg-white text-foreground hover:border-foreground/40"
+                }`}
+              >
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                <span className="sr-only">Next page</span>
+              </Link>
+            </nav>
           )}
         </div>
       </section>

@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -124,7 +125,13 @@ export default function ProductDetailPage({
           {/* Main Image */}
           <div className="relative aspect-square overflow-hidden rounded-md border border-border/40 bg-secondary/20 sm:rounded-xl">
             {images[mainIndex] ? (
-              <img src={images[mainIndex]} alt={product.name} className="h-full w-full object-cover" />
+              <Image
+                src={images[mainIndex]}
+                alt={product.name}
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
             ) : (
               <div className="h-full w-full flex items-center justify-center text-muted-foreground">No image</div>
             )}
@@ -142,11 +149,17 @@ export default function ProductDetailPage({
                 <button
                   key={i}
                   onClick={() => setMainIndex(i)}
-                  className={`h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-all sm:h-20 sm:w-20 sm:rounded-lg ${
+                  className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-all sm:h-20 sm:w-20 sm:rounded-lg ${
                     i === mainIndex ? "border-primary ring-2 ring-primary/20" : "border-border/40 hover:border-primary/40"
                   }`}
                 >
-                  <img src={url} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
+                  <Image
+                    src={url}
+                    alt={`${product.name} ${i + 1}`}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
                 </button>
               ))}
             </div>

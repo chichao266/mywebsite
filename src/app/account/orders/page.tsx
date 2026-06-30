@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowLeft, Package } from "lucide-react";
 
 export default function OrdersPage() {
-  const [user, setUser] = useState<{ id: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -14,8 +13,7 @@ export default function OrdersPage() {
     fetch("/api/auth/me")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data?.user) setUser(data.user);
-        else router.push("/auth/login");
+        if (!data?.user) router.push("/auth/login");
       })
       .catch(() => router.push("/auth/login"))
       .finally(() => setLoading(false));

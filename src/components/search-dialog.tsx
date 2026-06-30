@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 interface Product {
@@ -26,16 +27,23 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
 
   useEffect(() => {
     if (open) {
-      setQuery("");
-      setResults([]);
-      setTimeout(() => inputRef.current?.focus(), 100);
+      const resetTimer = window.setTimeout(() => {
+        setQuery("");
+        setResults([]);
+      }, 0);
+      const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 100);
+
+      return () => {
+        window.clearTimeout(resetTimer);
+        window.clearTimeout(focusTimer);
+      };
     }
   }, [open]);
 
   useEffect(() => {
     if (!query.trim()) {
-      setResults([]);
-      return;
+      const timer = window.setTimeout(() => setResults([]), 0);
+      return () => window.clearTimeout(timer);
     }
 
     const timer = setTimeout(async () => {
@@ -115,7 +123,15 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
                         className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors"
                       >
                         {thumb ? (
-                          <img src={thumb} alt="" className="w-12 h-12 rounded-md object-cover bg-muted/30 shrink-0" />
+                          <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-muted/30">
+                            <Image
+                              src={thumb}
+                              alt=""
+                              fill
+                              sizes="48px"
+                              className="object-cover"
+                            />
+                          </span>
                         ) : (
                           <div className="w-12 h-12 rounded-md bg-muted/30 shrink-0" />
                         )}

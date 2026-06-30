@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { type ProductFormData } from "@/lib/product-validation";
 import { createProduct, updateProduct } from "./actions";
@@ -269,7 +270,13 @@ export default function ProductForm({
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
             {images.map((url, index) => (
               <div key={`${url}-${index}`} className="relative group aspect-square rounded-lg border border-stone-200 bg-stone-50 overflow-hidden">
-                <img src={url} alt="" className="h-full w-full object-cover" />
+                <Image
+                  src={url}
+                  alt=""
+                  fill
+                  sizes="(min-width: 640px) 20vw, 50vw"
+                  className="object-cover"
+                />
                 <button
                   type="button"
                   onClick={() => removeImage(index)}

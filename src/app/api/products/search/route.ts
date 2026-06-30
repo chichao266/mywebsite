@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json({ products });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ products: [], error: "Search failed" }, { status: 500 });
   }
 }

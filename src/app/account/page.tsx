@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, LogOut, Package, Heart } from "lucide-react";
+import { User, LogOut, Package } from "lucide-react";
 
 interface UserData {
   id: string;

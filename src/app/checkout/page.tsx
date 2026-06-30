@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -186,8 +187,16 @@ export default function CheckoutPage() {
           <div className="mt-5 space-y-4">
             {items.map((item) => (
               <div key={item.id} className="flex gap-3 text-sm">
-                <div className="h-14 w-14 shrink-0 overflow-hidden rounded-md bg-muted">
-                  {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />}
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-muted">
+                  {item.imageUrl && (
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.name}
+                      fill
+                      sizes="56px"
+                      className="object-cover"
+                    />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="line-clamp-2 font-medium">{item.name}</p>
