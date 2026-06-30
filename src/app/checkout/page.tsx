@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -16,9 +16,20 @@ type CheckoutResponse = {
   error?: string;
 };
 
+function createCheckoutKey() {
+  const browserCrypto = globalThis.crypto;
+  if (browserCrypto?.randomUUID) {
+    return browserCrypto.randomUUID();
+  }
+  const random = new Uint32Array(4);
+  browserCrypto.getRandomValues(random);
+  return Array.from(random, (value) => value.toString(36)).join("-");
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
+  const checkoutKeyRef = useRef("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("paypal");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -78,6 +89,10 @@ export default function CheckoutPage() {
     }
 
     setLoading(true);
+    if (!checkoutKeyRef.current) {
+      checkoutKeyRef.current = createCheckoutKey();
+    }
+
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -85,6 +100,7 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           customer: form,
           paymentMethod,
+          checkoutKey: checkoutKeyRef.current,
           items: items.map((item) => ({
             id: item.id,
             quantity: item.quantity,
@@ -99,6 +115,7 @@ export default function CheckoutPage() {
       }
 
       clearCart();
+      checkoutKeyRef.current = "";
       if (data.redirectUrl) {
         window.location.href = data.redirectUrl;
         return;

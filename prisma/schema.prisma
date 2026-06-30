@@ -62,6 +62,7 @@ model Order {
   total           Float
   status          String      @default("pending")
   paymentMethod   String      @default("paypal")
+  checkoutKey     String?     @unique
   stripeSessionId String?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
