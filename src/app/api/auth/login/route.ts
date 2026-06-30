@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/password";
-import { getClientIp, rateLimit } from "@/lib/rate-limit";
+import { getClientIp, sharedRateLimit } from "@/lib/rate-limit";
 import { getRequiredSecret } from "@/lib/env";
 import { createUserToken } from "@/lib/user-token";
 
 export async function POST(req: NextRequest) {
   try {
-    const limit = rateLimit(`auth-login:${getClientIp(req)}`, {
+    const limit = await sharedRateLimit(`auth-login:${getClientIp(req)}`, {
       limit: 10,
       windowMs: 15 * 60 * 1000,
     });

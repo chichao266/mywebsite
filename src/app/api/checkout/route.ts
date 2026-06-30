@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { isProductionDeployment } from "@/lib/admin-dev-fallbacks";
 import { notifyAdminOfNewOrder } from "@/lib/admin-notifications";
 import { getPaymentConfig, type PaymentMethod } from "@/lib/payment-config";
-import { getClientIp, rateLimit } from "@/lib/rate-limit";
+import { getClientIp, sharedRateLimit } from "@/lib/rate-limit";
 
 type CheckoutItem = {
   id: string;
@@ -69,7 +69,7 @@ function isUniqueConstraintError(error: unknown) {
 }
 
 export async function POST(req: NextRequest) {
-  const limit = rateLimit(`checkout:${getClientIp(req)}`, {
+  const limit = await sharedRateLimit(`checkout:${getClientIp(req)}`, {
     limit: 8,
     windowMs: 10 * 60 * 1000,
   });

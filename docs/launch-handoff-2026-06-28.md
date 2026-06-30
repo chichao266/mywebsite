@@ -567,6 +567,62 @@ Verification:
 - `npm run build` passed.
 - `npm run lint` passed with existing warnings only.
 
+## Security Review Sixth Hardening Pass
+
+Date: 2026-06-30
+
+Status: implemented locally, not yet committed or pushed.
+
+Focus:
+
+- replace per-instance in-memory rate limiting with shared production rate limiting
+- keep a safe fallback so endpoints still work before the database table is created
+
+Files changed:
+
+- `prisma/schema.prisma`
+- `src/lib/rate-limit.ts`
+- `src/app/api/admin/login/route.ts`
+- `src/app/api/auth/login/route.ts`
+- `src/app/api/auth/register/route.ts`
+- `src/app/api/checkout/route.ts`
+- `src/app/api/support/route.ts`
+
+Main changes:
+
+- Added Prisma model `RateLimitBucket`.
+- Added `sharedRateLimit`.
+- `sharedRateLimit` uses the database as shared storage across Vercel instances.
+- If the database table is missing or unavailable, it falls back to the existing in-memory limiter.
+- Converted the following endpoints to shared rate limiting:
+  - admin login
+  - user login
+  - user registration
+  - checkout
+  - support form
+
+Verification:
+
+- `npx prisma generate` passed.
+- `npx prisma validate` passed with a temporary local PostgreSQL URL.
+- `npm run build` passed.
+- `npm run lint` passed with existing warnings only.
+
+Production database follow-up needed:
+
+The new shared limiter needs a small table in production. Create it in Neon Query:
+
+```sql
+CREATE TABLE IF NOT EXISTS "RateLimitBucket" (
+  "key" TEXT PRIMARY KEY,
+  "count" INTEGER NOT NULL DEFAULT 0,
+  "resetAt" TIMESTAMP(3) NOT NULL,
+  "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+The app can still run before this table exists because it falls back to in-memory limiting, but production-grade shared limiting starts only after the table exists.
+
 ## Handoff Notes For Next Person
 
 - The user wants discussion before design-heavy changes.

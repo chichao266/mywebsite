@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, needsPasswordRehash, verifyPassword } from "@/lib/password";
-import { getClientIp, rateLimit } from "@/lib/rate-limit";
+import { getClientIp, sharedRateLimit } from "@/lib/rate-limit";
 import { getOptionalSecret } from "@/lib/env";
 import { createAdminToken } from "@/lib/admin-token";
 
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Server authentication is not configured" }, { status: 500 });
   }
 
-  const limit = rateLimit(`admin-login:${getClientIp(request)}`, {
+  const limit = await sharedRateLimit(`admin-login:${getClientIp(request)}`, {
     limit: 10,
     windowMs: 15 * 60 * 1000,
   });
