@@ -1,11 +1,29 @@
 import Link from "next/link";
-import { getProducts } from "@/lib/product-data";
+import { getProductPage } from "@/lib/product-data";
 import DeleteButton from "./delete-button";
 
 export const dynamic = "force-dynamic";
+const PRODUCTS_PER_PAGE = 20;
 
-export default async function AdminProductsPage() {
-  const products = await getProducts();
+export default async function AdminProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page } = await searchParams;
+  const requestedPage = Number.parseInt(page || "1", 10);
+  const productPage = await getProductPage(
+    {},
+    {
+      page: Number.isFinite(requestedPage) ? requestedPage : 1,
+      pageSize: PRODUCTS_PER_PAGE,
+    }
+  );
+  const { products, totalCount, totalPages } = productPage;
+
+  function pageHref(nextPage: number) {
+    return nextPage > 1 ? `/admin/products?page=${nextPage}` : "/admin/products";
+  }
 
   return (
     <div>
@@ -18,6 +36,12 @@ export default async function AdminProductsPage() {
           + 新增商品
         </Link>
       </div>
+
+      {totalCount > 0 && (
+        <p className="mb-4 text-xs text-stone-400">
+          第 {productPage.page} / {totalPages} 页，共 {totalCount} 个商品
+        </p>
+      )}
 
       {products.length === 0 ? (
         <div className="bg-white rounded-xl border border-stone-200 p-12 text-center">
@@ -70,6 +94,36 @@ export default async function AdminProductsPage() {
             </tbody>
           </table>
         </div>
+      )}
+
+      {totalPages > 1 && (
+        <nav className="mt-6 flex items-center justify-center gap-3" aria-label="商品分页">
+          <Link
+            href={pageHref(Math.max(1, productPage.page - 1))}
+            aria-disabled={productPage.page <= 1}
+            className={`rounded-full border px-4 py-2 text-xs transition-colors ${
+              productPage.page <= 1
+                ? "pointer-events-none border-stone-200 text-stone-300"
+                : "border-stone-200 bg-white text-stone-700 hover:border-stone-400"
+            }`}
+          >
+            上一页
+          </Link>
+          <span className="min-w-20 text-center text-xs text-stone-400">
+            {productPage.page} / {totalPages}
+          </span>
+          <Link
+            href={pageHref(Math.min(totalPages, productPage.page + 1))}
+            aria-disabled={productPage.page >= totalPages}
+            className={`rounded-full border px-4 py-2 text-xs transition-colors ${
+              productPage.page >= totalPages
+                ? "pointer-events-none border-stone-200 text-stone-300"
+                : "border-stone-200 bg-white text-stone-700 hover:border-stone-400"
+            }`}
+          >
+            下一页
+          </Link>
+        </nav>
       )}
     </div>
   );
