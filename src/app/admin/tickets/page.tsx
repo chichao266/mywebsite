@@ -33,7 +33,7 @@ export default async function AdminTicketsPage({
       {/* Filter tabs */}
       <div className="flex gap-2 mb-4 flex-wrap">
         {[
-          { key: "", label: "全部" },
+          { key: "", label: "活跃" },
           { key: "open", label: "待处理" },
           { key: "in_progress", label: "处理中" },
           { key: "resolved", label: "已解决" },

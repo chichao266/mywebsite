@@ -5,8 +5,10 @@ import { requireAdmin } from "@/lib/admin-auth";
 import { demoTickets, rethrowInProduction } from "@/lib/admin-dev-fallbacks";
 import { revalidatePath } from "next/cache";
 
+const ACTIVE_TICKET_STATUSES = ["open", "in_progress", "resolved"];
+
 export async function getTickets(statusFilter?: string, page = 1, pageSize = 20) {
-  const where = statusFilter ? { status: statusFilter } : {};
+  const where = statusFilter ? { status: statusFilter } : { status: { in: ACTIVE_TICKET_STATUSES } };
   const requestedPage = Math.max(1, Math.floor(page));
   const safePageSize = Math.max(1, Math.floor(pageSize));
 
@@ -25,7 +27,9 @@ export async function getTickets(statusFilter?: string, page = 1, pageSize = 20)
     return { tickets, page: activePage, pageSize: safePageSize, totalCount, totalPages };
   } catch (error) {
     rethrowInProduction(error);
-    const matchingTickets = demoTickets.filter((ticket) => !statusFilter || ticket.status === statusFilter);
+    const matchingTickets = demoTickets.filter((ticket) =>
+      statusFilter ? ticket.status === statusFilter : ACTIVE_TICKET_STATUSES.includes(ticket.status)
+    );
     const totalCount = matchingTickets.length;
     const totalPages = Math.max(1, Math.ceil(totalCount / safePageSize));
     const activePage = Math.min(requestedPage, totalPages);
