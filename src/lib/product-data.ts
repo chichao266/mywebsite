@@ -52,9 +52,7 @@ function matchesFilters(product: { category: string; productType?: string | null
   if (filters.category && product.category !== filters.category) return false;
   if (filters.productType) {
     const productType = product.productType || "";
-    const name = product.name.toLowerCase();
-    const needle = filters.productType.toLowerCase();
-    if (productType !== filters.productType && !name.includes(needle.toLowerCase())) return false;
+    if (productType !== filters.productType) return false;
   }
   if (filters.stoneGroup === "Diamond") return product.category === "Lab Diamonds";
   if (filters.stoneGroup === "Color") return product.category !== "Lab Diamonds";
@@ -66,12 +64,7 @@ function getProductWhereParts(filters: ProductFilters) {
 
   if (filters.category) whereParts.push({ category: filters.category });
   if (filters.productType) {
-    whereParts.push({
-      OR: [
-        { productType: filters.productType },
-        { name: { contains: filters.productType, mode: "insensitive" as const } },
-      ],
-    });
+    whereParts.push({ productType: filters.productType });
   }
   if (filters.stoneGroup === "Diamond") {
     whereParts.push({ category: "Lab Diamonds" });
